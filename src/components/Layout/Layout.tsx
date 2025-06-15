@@ -10,15 +10,15 @@ const Layout: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
         {/* Sidebar */}
-        <Sidebar 
-          isOpen={sidebarOpen} 
-          onClose={() => setSidebarOpen(false)} 
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
         />
 
         {/* Main Content */}
         <div className="flex-1 lg:ml-0">
           <Header onMenuClick={() => setSidebarOpen(true)} />
-          
+
           <main className="p-4 lg:p-6">
             <div className="mx-auto">
               <Outlet />
