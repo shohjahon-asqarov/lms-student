@@ -1,34 +1,37 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { 
-  User, 
-  Quiz, 
-  QuizResult, 
-  DashboardStats, 
-  AuthResponse, 
-  LoginCredentials, 
-  RegisterData, 
+import axios, { AxiosInstance, AxiosResponse } from "axios";
+import {
+  User,
+  Quiz,
+  QuizResult,
+  DashboardStats,
+  AuthResponse,
+  LoginCredentials,
+  RegisterData,
   ChangePasswordData,
   UserSettings,
-  PaginatedResponse
-} from '../types';
-
-const API_BASE_URL = 'https://api.lms.itechacademy.uz/api';
+  PaginatedResponse,
+  ApiResponse,
+  QuizSubmission,
+  QuizFinishResponse,
+} from "../types";
+import { apiConfig, authConfig } from "../config/env";
 
 class ApiService {
   private api: AxiosInstance;
 
   constructor() {
     this.api = axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: apiConfig.baseUrl,
+      timeout: apiConfig.timeout,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
     // Request interceptor to add auth token
     this.api.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem('auth_token');
+        const token = localStorage.getItem(authConfig.tokenKey);
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -44,9 +47,9 @@ class ApiService {
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
-          localStorage.removeItem('auth_token');
-          localStorage.removeItem('user_data');
-          window.location.href = '/login';
+          localStorage.removeItem(authConfig.tokenKey);
+          localStorage.removeItem(authConfig.userDataKey);
+          window.location.href = authConfig.loginRedirectUrl;
         }
         return Promise.reject(error);
       }
@@ -55,37 +58,48 @@ class ApiService {
 
   // Auth Methods
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/login', credentials);
+    const response: AxiosResponse<AuthResponse> = await this.api.post(
+      "/auth/login",
+      credentials
+    );
     return response.data;
   }
 
   async register(data: RegisterData): Promise<AuthResponse> {
-    const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/register', data);
+    const response: AxiosResponse<AuthResponse> = await this.api.post(
+      "/auth/register",
+      data
+    );
     return response.data;
   }
 
   async logout(): Promise<void> {
-    await this.api.post('/auth/logout');
+    await this.api.post("/auth/logout");
   }
 
   async refreshToken(): Promise<AuthResponse> {
-    const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/refresh');
+    const response: AxiosResponse<AuthResponse> = await this.api.post(
+      "/auth/refresh"
+    );
     return response.data;
   }
 
   // User Methods
   async getProfile(): Promise<User> {
-    const response: AxiosResponse<User> = await this.api.get('/users/profile');
+    const response: AxiosResponse<User> = await this.api.get("/users/profile");
     return response.data;
   }
 
   async updateProfile(data: Partial<User>): Promise<User> {
-    const response: AxiosResponse<User> = await this.api.put('/users/profile', data);
+    const response: AxiosResponse<User> = await this.api.put(
+      "/users/profile",
+      data
+    );
     return response.data;
   }
 
   async changePassword(data: ChangePasswordData): Promise<void> {
-    await this.api.put('/users/change-password', data);
+    await this.api.put("/users/change-password", data);
   }
 
   async getUsers(page = 1, limit = 10): Promise<PaginatedResponse<User>> {
@@ -100,21 +114,21 @@ class ApiService {
     const response: AxiosResponse<PaginatedResponse<Quiz>> = await this.api.get(
       `/quiz?page=${page}&pageSize=${limit}`
     );
-    
+
     // Transform the data to match our interface
     const transformedData = {
       data: response.data.data.map((quiz: Quiz) => ({
         ...quiz,
         description: `Quiz with ${quiz.questionCount} questions`,
-        isActive: quiz.status === 'ACTIVE',
+        isActive: quiz.status === "ACTIVE",
         totalQuestions: quiz.questionCount,
         createdBy: quiz.teacherId,
-        difficulty: 'medium' as const,
-        category: 'General'
+        difficulty: "medium" as const,
+        category: "General",
       })),
-      meta: response.data.meta
+      meta: response.data.meta,
     };
-    
+
     return transformedData;
   }
 
@@ -123,21 +137,41 @@ class ApiService {
     return {
       ...response.data,
       description: `Quiz with ${response.data.questionCount} questions`,
-      isActive: response.data.status === 'ACTIVE',
+      isActive: response.data.status === "ACTIVE",
       totalQuestions: response.data.questionCount,
       createdBy: response.data.teacherId,
-      difficulty: 'medium' as const,
-      category: 'General'
+      difficulty: "medium" as const,
+      category: "General",
     };
   }
 
-  async createQuiz(data: Omit<Quiz, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<Quiz> {
-    const response: AxiosResponse<Quiz> = await this.api.post('/quiz', data);
+  async startQuiz(quizId: string): Promise<any> {
+    const response: AxiosResponse<any> = await this.api.get(
+      `/quiz/${quizId}/start`
+    );
+    return response.data;
+  }
+
+  async finishQuiz(submission: QuizSubmission): Promise<QuizFinishResponse> {
+    const response: AxiosResponse<QuizFinishResponse> = await this.api.post(
+      "/quiz/finish",
+      submission
+    );
+    return response.data;
+  }
+
+  async createQuiz(
+    data: Omit<Quiz, "id" | "createdAt" | "updatedAt" | "createdBy">
+  ): Promise<Quiz> {
+    const response: AxiosResponse<Quiz> = await this.api.post("/quiz", data);
     return response.data;
   }
 
   async updateQuiz(id: string, data: Partial<Quiz>): Promise<Quiz> {
-    const response: AxiosResponse<Quiz> = await this.api.put(`/quiz/${id}`, data);
+    const response: AxiosResponse<Quiz> = await this.api.put(
+      `/quiz/${id}`,
+      data
+    );
     return response.data;
   }
 
@@ -146,27 +180,41 @@ class ApiService {
   }
 
   // Quiz Results Methods
-  async getQuizResults(page = 1, limit = 10): Promise<PaginatedResponse<QuizResult>> {
-    const response: AxiosResponse<PaginatedResponse<QuizResult>> = await this.api.get(
-      `/quiz-results?page=${page}&pageSize=${limit}`
-    );
+  async getQuizResults(
+    page = 1,
+    limit = 10
+  ): Promise<PaginatedResponse<QuizResult>> {
+    const response: AxiosResponse<PaginatedResponse<QuizResult>> =
+      await this.api.get(`/quiz-results?page=${page}&pageSize=${limit}`);
     return response.data;
   }
 
   async getQuizResult(id: string): Promise<QuizResult> {
-    const response: AxiosResponse<QuizResult> = await this.api.get(`/quiz-results/${id}`);
-    return response.data;
-  }
-
-  async submitQuizResult(data: Omit<QuizResult, 'id' | 'completedAt' | 'user' | 'quiz'>): Promise<QuizResult> {
-    const response: AxiosResponse<QuizResult> = await this.api.post('/quiz-results', data);
-    return response.data;
-  }
-
-  async getUserResults(userId: string, page = 1, limit = 10): Promise<PaginatedResponse<QuizResult>> {
-    const response: AxiosResponse<PaginatedResponse<QuizResult>> = await this.api.get(
-      `/quiz-results/user/${userId}?page=${page}&pageSize=${limit}`
+    const response: AxiosResponse<QuizResult> = await this.api.get(
+      `/quiz-results/${id}`
     );
+    return response.data;
+  }
+
+  async submitQuizResult(
+    data: Omit<QuizResult, "id" | "completedAt" | "user" | "quiz">
+  ): Promise<QuizResult> {
+    const response: AxiosResponse<QuizResult> = await this.api.post(
+      "/quiz-results",
+      data
+    );
+    return response.data;
+  }
+
+  async getUserResults(
+    userId: string,
+    page = 1,
+    limit = 10
+  ): Promise<PaginatedResponse<QuizResult>> {
+    const response: AxiosResponse<PaginatedResponse<QuizResult>> =
+      await this.api.get(
+        `/quiz-results/user/${userId}?page=${page}&pageSize=${limit}`
+      );
     return response.data;
   }
 
@@ -182,21 +230,21 @@ class ApiService {
       recentQuizzes: [],
       recentResults: [],
       userGrowth: [
-        { month: 'Jan', users: 100 },
-        { month: 'Feb', users: 120 },
-        { month: 'Mar', users: 135 },
-        { month: 'Apr', users: 140 },
-        { month: 'May', users: 145 },
-        { month: 'Jun', users: 150 }
+        { month: "Jan", users: 100 },
+        { month: "Feb", users: 120 },
+        { month: "Mar", users: 135 },
+        { month: "Apr", users: 140 },
+        { month: "May", users: 145 },
+        { month: "Jun", users: 150 },
       ],
       scoreDistribution: [
-        { range: '90-100%', count: 25 },
-        { range: '70-89%', count: 40 },
-        { range: '50-69%', count: 20 },
-        { range: 'Below 50%', count: 15 }
-      ]
+        { range: "90-100%", count: 25 },
+        { range: "70-89%", count: 40 },
+        { range: "50-69%", count: 20 },
+        { range: "Below 50%", count: 15 },
+      ],
     };
-    
+
     return mockStats;
   }
 
@@ -204,20 +252,22 @@ class ApiService {
   async getUserSettings(): Promise<UserSettings> {
     // Mock settings since we don't have this endpoint
     const mockSettings: UserSettings = {
-      theme: 'light',
-      language: 'en',
+      theme: "light",
+      language: "en",
       notifications: true,
-      emailUpdates: true
+      emailUpdates: true,
     };
-    
+
     return mockSettings;
   }
 
-  async updateUserSettings(settings: Partial<UserSettings>): Promise<UserSettings> {
+  async updateUserSettings(
+    settings: Partial<UserSettings>
+  ): Promise<UserSettings> {
     // Mock update since we don't have this endpoint
     const currentSettings = await this.getUserSettings();
     const updatedSettings = { ...currentSettings, ...settings };
-    
+
     return updatedSettings;
   }
 }

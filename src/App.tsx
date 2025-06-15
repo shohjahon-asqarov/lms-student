@@ -10,14 +10,16 @@ import Quizzes from './pages/Quizzes';
 import Results from './pages/Results';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import TakeQuiz from './pages/TakeQuiz';
+import { queryConfig } from './config/env';
 
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      refetchOnWindowFocus: false,
+      retry: queryConfig.retryCount,
+      staleTime: queryConfig.staleTime,
+      refetchOnWindowFocus: queryConfig.refetchOnWindowFocus,
     },
   },
 });
@@ -31,33 +33,44 @@ function App() {
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
-              
-              {/* Protected Routes */}
+
+              {/* Protected Routes - Student Only */}
               <Route path="/" element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRoles={['STUDENT']}>
                   <Layout />
                 </ProtectedRoute>
               }>
                 <Route index element={<Navigate to="/dashboard" replace />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="quizzes" element={<Quizzes />} />
+                <Route path="dashboard" element={
+                  <ProtectedRoute requiredRoles={['STUDENT']}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="quizzes" element={
+                  <ProtectedRoute requiredRoles={['STUDENT']}>
+                    <Quizzes />
+                  </ProtectedRoute>
+                } />
                 <Route path="results" element={
-                  <ProtectedRoute requiredRoles={['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT']}>
+                  <ProtectedRoute requiredRoles={['STUDENT']}>
                     <Results />
                   </ProtectedRoute>
                 } />
-                <Route path="users" element={
-                  <ProtectedRoute requiredRoles={['SUPER_ADMIN', 'ADMIN', 'TEACHER']}>
-                    <div>Users page coming soon...</div>
-                  </ProtectedRoute>
-                } />
-                <Route path="take-quiz" element={
+                <Route path="take-quiz/:id" element={
                   <ProtectedRoute requiredRoles={['STUDENT']}>
-                    <div>Take Quiz page coming soon...</div>
+                    <TakeQuiz />
                   </ProtectedRoute>
                 } />
-                <Route path="profile" element={<Profile />} />
-                <Route path="settings" element={<Settings />} />
+                <Route path="profile" element={
+                  <ProtectedRoute requiredRoles={['STUDENT']}>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
+                <Route path="settings" element={
+                  <ProtectedRoute requiredRoles={['STUDENT']}>
+                    <Settings />
+                  </ProtectedRoute>
+                } />
               </Route>
 
               {/* Fallback */}

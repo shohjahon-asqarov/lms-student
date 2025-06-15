@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDashboardStats } from '../hooks/useQueries';
 import { useAuth } from '../hooks/useAuth';
-import { 
-  Users, 
-  FileText, 
-  BarChart3, 
-  TrendingUp,
-  Clock,
-  Award,
+import { useUserResults } from '../hooks/useQueries';
+import {
   Target,
-  ArrowRight
+  Award,
+  Clock,
+  FileText,
+  TrendingUp,
+  ArrowRight,
+  BookOpen,
+  BarChart3
 } from 'lucide-react';
 import {
   BarChart,
@@ -22,74 +22,36 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  LineChart,
-  Line
+  Cell
 } from 'recharts';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const { data: stats, isLoading, error } = useDashboardStats();
+  const { data: resultsData } = useUserResults(user?.id || '', 1, 5);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  }
+  // Mock data for student dashboard
+  const studentStats = {
+    totalQuizzesTaken: 12,
+    averageScore: 78,
+    totalTimeSpent: 180,
+    quizzesCompleted: 8
+  };
 
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-700">Error loading dashboard data</p>
-      </div>
-    );
-  }
+  // Mock performance data
+  const performanceData = [
+    { month: 'Jan', score: 75 },
+    { month: 'Feb', score: 78 },
+    { month: 'Mar', score: 82 },
+    { month: 'Apr', score: 79 },
+    { month: 'May', score: 85 },
+    { month: 'Jun', score: 88 }
+  ];
 
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444'];
-
-  const statCards = [
-    {
-      title: 'Total Users',
-      value: stats?.totalUsers || 0,
-      icon: Users,
-      color: 'bg-blue-500',
-      bgColor: 'bg-blue-50',
-      textColor: 'text-blue-700',
-      change: '+12%',
-      changeType: 'positive' as const
-    },
-    {
-      title: 'Total Quizzes',
-      value: stats?.totalQuizzes || 0,
-      icon: FileText,
-      color: 'bg-emerald-500',
-      bgColor: 'bg-emerald-50',
-      textColor: 'text-emerald-700',
-      change: '+8%',
-      changeType: 'positive' as const
-    },
-    {
-      title: 'Total Results',
-      value: stats?.totalResults || 0,
-      icon: BarChart3,
-      color: 'bg-purple-500',
-      bgColor: 'bg-purple-50',
-      textColor: 'text-purple-700',
-      change: '+24%',
-      changeType: 'positive' as const
-    },
-    {
-      title: 'Average Score',
-      value: `${stats?.averageScore || 0}%`,
-      icon: Award,
-      color: 'bg-amber-500',
-      bgColor: 'bg-amber-50',
-      textColor: 'text-amber-700',
-      change: '+5%',
-      changeType: 'positive' as const
-    }
+  const scoreDistribution = [
+    { range: '90-100%', count: 2, color: '#10B981' },
+    { range: '70-89%', count: 5, color: '#3B82F6' },
+    { range: '50-69%', count: 3, color: '#F59E0B' },
+    { range: 'Below 50%', count: 2, color: '#EF4444' }
   ];
 
   return (
@@ -102,12 +64,12 @@ const Dashboard: React.FC = () => {
               Welcome back, {user?.firstName}! 👋
             </h1>
             <p className="text-blue-100 text-lg">
-              Here's an overview of your quiz platform performance
+              Ready to continue your learning journey?
             </p>
           </div>
           <div className="hidden md:block">
             <div className="w-32 h-32 bg-white bg-opacity-10 rounded-full flex items-center justify-center">
-              <Target className="w-16 h-16 text-white" />
+              <BookOpen className="w-16 h-16 text-white" />
             </div>
           </div>
         </div>
@@ -115,48 +77,82 @@ const Dashboard: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <div key={index} className="dashboard-card hover:scale-105">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                  <div className="flex items-center mt-2">
-                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                    <span className="text-sm text-green-500 font-medium">{stat.change}</span>
-                    <span className="text-sm text-gray-500 ml-1">from last month</span>
-                  </div>
-                </div>
-                <div className={`w-12 h-12 ${stat.bgColor} rounded-xl flex items-center justify-center`}>
-                  <Icon className={`w-6 h-6 ${stat.textColor}`} />
-                </div>
-              </div>
+        <div className="dashboard-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Quizzes Taken</p>
+              <p className="text-2xl font-bold text-gray-900">{studentStats.totalQuizzesTaken}</p>
             </div>
-          );
-        })}
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <FileText className="w-6 h-6 text-blue-600" />
+            </div>
+          </div>
+          <div className="mt-4 flex items-center text-sm text-green-600">
+            <TrendingUp className="w-4 h-4 mr-1" />
+            <span>+12% from last month</span>
+          </div>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Average Score</p>
+              <p className="text-2xl font-bold text-gray-900">{studentStats.averageScore}%</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <Award className="w-6 h-6 text-green-600" />
+            </div>
+          </div>
+          <div className="mt-4 flex items-center text-sm text-green-600">
+            <TrendingUp className="w-4 h-4 mr-1" />
+            <span>+5% improvement</span>
+          </div>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Time Spent</p>
+              <p className="text-2xl font-bold text-gray-900">{studentStats.totalTimeSpent}m</p>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <Clock className="w-6 h-6 text-purple-600" />
+            </div>
+          </div>
+          <div className="mt-4 flex items-center text-sm text-blue-600">
+            <span>This month</span>
+          </div>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Completed</p>
+              <p className="text-2xl font-bold text-gray-900">{studentStats.quizzesCompleted}</p>
+            </div>
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <Target className="w-6 h-6 text-orange-600" />
+            </div>
+          </div>
+          <div className="mt-4 flex items-center text-sm text-orange-600">
+            <span>Quizzes finished</span>
+          </div>
+        </div>
       </div>
 
-      {/* Charts Section */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* User Growth Chart */}
+        {/* Performance Trend */}
         <div className="dashboard-card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">User Growth</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Trend</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={stats?.userGrowth || []}>
+            <BarChart data={performanceData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
-              <Line 
-                type="monotone" 
-                dataKey="users" 
-                stroke="#3B82F6" 
-                strokeWidth={3}
-                dot={{ fill: '#3B82F6', strokeWidth: 2, r: 6 }}
-              />
-            </LineChart>
+              <Bar dataKey="score" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
@@ -164,49 +160,60 @@ const Dashboard: React.FC = () => {
         <div className="dashboard-card">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Score Distribution</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={stats?.scoreDistribution || []}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="range" />
-              <YAxis />
+            <PieChart>
+              <Pie
+                data={scoreDistribution}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ range, percent }) => `${range} ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="count"
+              >
+                {scoreDistribution.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
               <Tooltip />
-              <Bar dataKey="count" fill="#10B981" radius={[4, 4, 0, 0]} />
-            </BarChart>
+            </PieChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Quizzes */}
+        {/* Recent Results */}
         <div className="dashboard-card">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Quizzes</h3>
-            <Link 
-              to="/quizzes" 
+            <h3 className="text-lg font-semibold text-gray-900">Recent Results</h3>
+            <Link
+              to="/results"
               className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
             >
               View all <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           <div className="space-y-3">
-            {stats?.recentQuizzes?.slice(0, 5).map((quiz) => (
-              <div key={quiz.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+            {resultsData?.data.slice(0, 5).map((result) => (
+              <div key={result.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-blue-600" />
+                    <BarChart3 className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{quiz.title}</p>
-                    <p className="text-sm text-gray-500">{quiz.totalQuestions} questions</p>
+                    <p className="font-medium text-gray-900">{result.quiz.title}</p>
+                    <p className="text-sm text-gray-500">{result.percentage}% score</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    quiz.isActive 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-gray-100 text-gray-500'
-                  }`}>
-                    {quiz.isActive ? 'Active' : 'Inactive'}
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${result.percentage >= 70
+                      ? 'bg-green-100 text-green-700'
+                      : result.percentage >= 50
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}>
+                    {result.percentage >= 70 ? 'Good' : result.percentage >= 50 ? 'Average' : 'Needs Improvement'}
                   </span>
                 </div>
               </div>
@@ -214,59 +221,20 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Recent Results */}
-        <div className="dashboard-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Results</h3>
-            <Link 
-              to="/results" 
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
-            >
-              View all <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <div className="space-y-3">
-            {stats?.recentResults?.slice(0, 5).map((result) => (
-              <div key={result.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Award className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {result.user?.firstName} {result.user?.lastName}
-                    </p>
-                    <p className="text-sm text-gray-500">{result.quiz?.title}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold text-gray-900">{result.percentage}%</p>
-                  <div className="flex items-center gap-1 text-xs text-gray-500">
-                    <Clock className="w-3 h-3" />
-                    {result.timeSpent}m
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      {(user?.role === 'admin' || user?.role === 'teacher') && (
+        {/* Quick Actions */}
         <div className="dashboard-card">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
-              to="/quizzes/create"
+              to="/quizzes"
               className="flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group"
             >
               <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Create Quiz</p>
-                <p className="text-sm text-gray-500">Add a new quiz</p>
+                <p className="font-medium text-gray-900">Take Quiz</p>
+                <p className="text-sm text-gray-500">Start a new quiz</p>
               </div>
             </Link>
 
@@ -279,25 +247,38 @@ const Dashboard: React.FC = () => {
               </div>
               <div>
                 <p className="font-medium text-gray-900">View Results</p>
-                <p className="text-sm text-gray-500">Check performance</p>
+                <p className="text-sm text-gray-500">Check your progress</p>
               </div>
             </Link>
 
             <Link
-              to="/users"
+              to="/profile"
               className="flex items-center gap-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors group"
             >
               <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Users className="w-5 h-5 text-white" />
+                <BookOpen className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Manage Users</p>
-                <p className="text-sm text-gray-500">User administration</p>
+                <p className="font-medium text-gray-900">Profile</p>
+                <p className="text-sm text-gray-500">Update your info</p>
+              </div>
+            </Link>
+
+            <Link
+              to="/settings"
+              className="flex items-center gap-3 p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors group"
+            >
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Award className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">Settings</p>
+                <p className="text-sm text-gray-500">Customize preferences</p>
               </div>
             </Link>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

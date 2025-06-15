@@ -3,7 +3,7 @@ export interface User {
   phone: string;
   firstName: string | null;
   lastName: string | null;
-  role: 'SUPER_ADMIN' | 'ADMIN' | 'TEACHER' | 'STUDENT';
+  role: "SUPER_ADMIN" | "ADMIN" | "TEACHER" | "STUDENT";
   avatar?: string;
   createdAt: string;
   updatedAt: string;
@@ -18,7 +18,7 @@ export interface Quiz {
   duration: number; // in minutes
   teacherId: string;
   questionCount: number;
-  status: 'PENDING' | 'ACTIVE' | 'COMPLETED';
+  status: "PENDING" | "ACTIVE" | "COMPLETED";
   createdAt: string;
   updatedAt: string;
   // Computed properties for compatibility
@@ -27,24 +27,20 @@ export interface Quiz {
   isActive?: boolean;
   createdBy?: string;
   totalQuestions?: number;
-  difficulty?: 'easy' | 'medium' | 'hard';
+  difficulty?: "easy" | "medium" | "hard";
   category?: string;
 }
 
 export interface Question {
   id: string;
   text: string;
-  type: 'multiple-choice' | 'true-false' | 'short-answer';
-  options?: QuestionOption[];
-  correctAnswer: string | string[];
-  points: number;
-  explanation?: string;
+  answers: QuestionAnswer[];
 }
 
-export interface QuestionOption {
+export interface QuestionAnswer {
   id: string;
+  label: string;
   text: string;
-  isCorrect: boolean;
 }
 
 export interface QuizResult {
@@ -94,7 +90,7 @@ export interface RegisterData {
   password: string;
   firstName: string;
   lastName: string;
-  role: 'STUDENT' | 'TEACHER';
+  role: "STUDENT" | "TEACHER";
 }
 
 export interface ChangePasswordData {
@@ -104,8 +100,8 @@ export interface ChangePasswordData {
 }
 
 export interface UserSettings {
-  theme: 'light' | 'dark';
-  language: 'en' | 'uz' | 'ru';
+  theme: "light" | "dark";
+  language: "en" | "uz" | "ru";
   notifications: boolean;
   emailUpdates: boolean;
 }
@@ -134,4 +130,38 @@ export interface QuizSession {
   currentQuestionIndex: number;
   answers: Record<string, string | string[]>;
   timeRemaining: number;
+}
+
+export interface QuizSubmission {
+  quizId: string;
+  questions: QuizSubmissionQuestion[];
+}
+
+export interface QuizSubmissionQuestion {
+  questionId: string;
+  questionType: string;
+  answers: string[]; // Array of answer UUIDs
+}
+
+export interface QuizFinishResponse {
+  data: QuizQuestionResult[];
+  correntCount: number;
+  inCorrentCount: number;
+}
+
+export interface QuizQuestionResult {
+  id: string;
+  text: string;
+  result: QuizAnswerResult;
+  user_result: boolean;
+}
+
+export interface QuizAnswerResult {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  questionId: string;
+  label: string;
+  createdAt: string;
+  updatedAt: string;
 }

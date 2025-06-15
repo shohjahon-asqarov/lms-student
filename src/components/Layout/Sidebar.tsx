@@ -1,15 +1,14 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  BarChart3, 
-  User, 
-  Settings, 
-  LogOut,
+import {
+  LayoutDashboard,
+  FileText,
+  BarChart3,
   BookOpen,
-  Users
+  User,
+  Settings,
+  LogOut
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -19,53 +18,43 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
+  const location = useLocation();
 
+  // Student-only menu items
   const menuItems = [
-    { 
-      path: '/dashboard', 
-      label: 'Dashboard', 
+    {
+      path: '/dashboard',
+      label: 'Dashboard',
       icon: LayoutDashboard,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT']
-    },
-    { 
-      path: '/quizzes', 
-      label: 'Quizzes', 
-      icon: FileText,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT']
-    },
-    { 
-      path: '/results', 
-      label: 'Results', 
-      icon: BarChart3,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT']
-    },
-    { 
-      path: '/users', 
-      label: 'Users', 
-      icon: Users,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER']
-    },
-    { 
-      path: '/take-quiz', 
-      label: 'Take Quiz', 
-      icon: BookOpen,
       roles: ['STUDENT']
     },
-    { 
-      path: '/profile', 
-      label: 'Profile', 
-      icon: User,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT']
+    {
+      path: '/quizzes',
+      label: 'Available Quizzes',
+      icon: FileText,
+      roles: ['STUDENT']
     },
-    { 
-      path: '/settings', 
-      label: 'Settings', 
+    {
+      path: '/results',
+      label: 'My Results',
+      icon: BarChart3,
+      roles: ['STUDENT']
+    },
+    {
+      path: '/profile',
+      label: 'Profile',
+      icon: User,
+      roles: ['STUDENT']
+    },
+    {
+      path: '/settings',
+      label: 'Settings',
       icon: Settings,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT']
+      roles: ['STUDENT']
     },
   ];
 
-  const filteredMenuItems = menuItems.filter(item => 
+  const filteredMenuItems = menuItems.filter(item =>
     item.roles.includes(user?.role || 'STUDENT')
   );
 
@@ -78,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={onClose}
         />
@@ -98,8 +87,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <BookOpen className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Quiz LMS</h1>
-              <p className="text-sm text-gray-500">Learning Platform</p>
+              <h1 className="text-xl font-bold text-gray-900">Student Portal</h1>
+              <p className="text-sm text-gray-500">Quiz Learning Platform</p>
             </div>
           </div>
         </div>
@@ -112,48 +101,47 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">
-                {user?.firstName || 'User'} {user?.lastName || ''}
+                {user?.firstName || 'Student'} {user?.lastName || ''}
               </p>
-              <p className="text-xs text-gray-500 capitalize">{user?.role?.toLowerCase()}</p>
+              <p className="text-xs text-gray-500">Student</p>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4">
-          <ul className="space-y-1">
-            {filteredMenuItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <li key={item.path}>
-                  <NavLink
-                    to={item.path}
-                    onClick={onClose}
-                    className={({ isActive }) => `
-                      flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200
-                      ${isActive 
-                        ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' 
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                      }
-                    `}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {item.label}
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
+        <nav className="flex-1 p-4 space-y-2">
+          {filteredMenuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path;
+
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={onClose}
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
+                  ${isActive
+                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
+                    : 'text-gray-700 hover:bg-gray-50'
+                  }
+                `}
+              >
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{item.label}</span>
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Logout Button */}
+        {/* Logout */}
         <div className="p-4 border-t border-gray-200">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
           >
             <LogOut className="w-5 h-5" />
-            Logout
+            <span className="font-medium">Logout</span>
           </button>
         </div>
       </div>
