@@ -29,10 +29,10 @@ function getScoreBgColor(percentage: number) {
 }
 
 function getPerformanceLabel(percentage: number) {
-  if (percentage >= 80) return 'Excellent';
-  if (percentage >= 60) return 'Good';
-  if (percentage >= 40) return 'Fair';
-  return 'Needs Improvement';
+  if (percentage >= 80) return 'A\'lo';
+  if (percentage >= 60) return 'Yaxshi';
+  if (percentage >= 40) return 'Qoniqarli';
+  return 'Yetarli emas';
 }
 
 function renderScoreCard(percentage: number, correctAnswers: number, totalQuestions: number, incorrectAnswers: number) {
@@ -167,28 +167,28 @@ const Results: React.FC = () => {
     const userName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : 'Unknown';
     const userPhone = user?.phone || 'Unknown';
 
-    const message = `📊 <b>Quiz Result - Detailed Report</b>\n\n` +
-      `👤 <b>User Information:</b>\n` +
-      `   • Name: ${userName}\n` +
-      `   • Phone: ${userPhone}\n` +
-      `   • Role: ${user?.role || 'Unknown'}\n\n` +
-      `📝 <b>Quiz Information:</b>\n` +
-      `   • Title: ${quizData?.title || 'Unknown Quiz'}\n` +
-      `   • Duration: ${quizData?.duration || 'Unknown'} minutes\n` +
-      `   • Difficulty: ${quizData?.difficulty || 'Unknown'}\n` +
-      `   • Status: ${quizData?.status || 'Unknown'}\n` +
-      `   • Created: ${quizData?.createdAt ? new Date(quizData.createdAt).toLocaleDateString('uz-UZ') : 'Unknown'}\n\n` +
-      `📈 <b>Performance Results:</b>\n` +
-      `   • Score: ${percentage}%\n` +
-      `   • Correct Answers: ${correctAnswers}/${totalQuestions}\n` +
-      `   • Incorrect Answers: ${incorrectAnswers}/${totalQuestions}\n` +
-      `   • Performance: ${getPerformanceLabel(percentage)}\n\n` +
-      `⏰ <b>Completion Time:</b>\n` +
+    const message = `📊 <b>Test Natijasi - Batafsil Hisobot</b>\n\n` +
+      `👤 <b>Foydalanuvchi ma'lumotlari:</b>\n` +
+      `   • Ism-familiya: ${userName}\n` +
+      `   • Telefon: ${userPhone}\n` +
+      `   • Lavozim: ${user?.role || 'Noma\'lum'}\n\n` +
+      `📝 <b>Test ma'lumotlari:</b>\n` +
+      `   • Nomi: ${quizData?.title || 'Noma\'lum test'}\n` +
+      `   • Davomiyligi: ${quizData?.duration || 'Noma\'lum'} daqiqa\n` +
+      `   • Qiyinlik darajasi: ${quizData?.difficulty || 'Noma\'lum'}\n` +
+      `   • Holati: ${quizData?.status || 'Noma\'lum'}\n` +
+      `   • Yaratilgan sana: ${quizData?.createdAt ? new Date(quizData.createdAt).toLocaleDateString('uz-UZ') : 'Noma\'lum'}\n\n` +
+      `📈 <b>Test natijalari:</b>\n` +
+      `   • Ball: ${percentage}%\n` +
+      `   • To'g'ri javoblar: ${correctAnswers}/${totalQuestions}\n` +
+      `   • Noto'g'ri javoblar: ${incorrectAnswers}/${totalQuestions}\n` +
+      `   • Natija: ${getPerformanceLabel(percentage)}\n\n` +
+      `⏰ <b>Yakunlangan vaqt:</b>\n` +
       `   • ${currentDate}\n\n` +
-      `🎯 <b>Detailed Breakdown:</b>\n` +
-      `   • Questions Answered: ${totalQuestions}\n` +
-      `   • Success Rate: ${((correctAnswers / totalQuestions) * 100).toFixed(1)}%\n` +
-      `   • Error Rate: ${((incorrectAnswers / totalQuestions) * 100).toFixed(1)}%`;
+      `🎯 <b>Batafsil ma'lumot:</b>\n` +
+      `   • Jami savollar soni: ${totalQuestions}\n` +
+      `   • Muvaffaqiyat darajasi: ${((correctAnswers / totalQuestions) * 100).toFixed(1)}%\n` +
+      `   • Xatolik darajasi: ${((incorrectAnswers / totalQuestions) * 100).toFixed(1)}%`;
 
     try {
       await sendTelegramResult(message);

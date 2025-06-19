@@ -25,7 +25,7 @@ const TakeQuiz: React.FC = () => {
     const location = useLocation();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string[]>>({});
+    const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
     const [timeRemaining, setTimeRemaining] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -47,7 +47,7 @@ const TakeQuiz: React.FC = () => {
     }, [currentQuestionIndex, questions.length]);
 
     const hasAnsweredCurrent = useMemo(() => {
-        return selectedAnswers[currentQuestion?.id]?.length > 0;
+        return !!selectedAnswers[currentQuestion?.id];
     }, [selectedAnswers, currentQuestion?.id]);
 
     // Fetch quiz data when component mounts
@@ -107,22 +107,18 @@ const TakeQuiz: React.FC = () => {
 
     const handleAnswerSelect = useCallback((questionId: string, answerId: string) => {
         setSelectedAnswers(prev => {
-            const currentAnswers = prev[questionId] || [];
-            const isSelected = currentAnswers.includes(answerId);
+            const currentAnswer = prev[questionId];
 
-            if (isSelected) {
-                // Remove answer if already selected
-                return {
-                    ...prev,
-                    [questionId]: currentAnswers.filter(id => id !== answerId)
-                };
-            } else {
-                // Add answer
-                return {
-                    ...prev,
-                    [questionId]: [...currentAnswers, answerId]
-                };
+            // If the same answer is clicked again, do nothing
+            if (currentAnswer === answerId) {
+                return prev;
             }
+
+            // Set the new answer
+            return {
+                ...prev,
+                [questionId]: answerId
+            };
         });
     }, []);
 
@@ -150,7 +146,7 @@ const TakeQuiz: React.FC = () => {
                 questions: questions.map(question => ({
                     questionId: question.id,
                     questionType: 'multiple_choice',
-                    answers: selectedAnswers[question.id] || []
+                    answers: selectedAnswers[question.id] ? [selectedAnswers[question.id]] : []
                 }))
             };
 
@@ -302,7 +298,7 @@ const TakeQuiz: React.FC = () => {
                     {/* Answers */}
                     <div className="space-y-3">
                         {currentQuestion.answers.map((answer) => {
-                            const isSelected = selectedAnswers[currentQuestion.id]?.includes(answer.id);
+                            const isSelected = selectedAnswers[currentQuestion.id] === answer.id;
 
                             return (
                                 <button
@@ -381,7 +377,7 @@ const TakeQuiz: React.FC = () => {
                     <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
                         {questions.map((_, index) => {
                             const questionId = questions[index].id;
-                            const isAnswered = selectedAnswers[questionId]?.length > 0;
+                            const isAnswered = !!selectedAnswers[questionId];
                             const isCurrent = index === currentQuestionIndex;
 
                             return (
