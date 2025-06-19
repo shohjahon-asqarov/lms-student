@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './hooks/useAuth';
@@ -12,6 +12,12 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import TakeQuiz from './pages/TakeQuiz';
 import { queryConfig } from './config/env';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Toast } from 'primereact/toast';
+import 'primereact/resources/themes/lara-light-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -25,6 +31,8 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  const toast = useRef(null);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -77,6 +85,8 @@ function App() {
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </div>
+          <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
+          <Toast ref={toast} position="top-right" />
         </Router>
       </AuthProvider>
     </QueryClientProvider>

@@ -102,7 +102,7 @@ const Login: React.FC = () => {
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
               <Link
-                to="/forgot-password"
+                to="/"
                 className="text-sm text-blue-600 hover:text-blue-700 font-medium"
               >
                 Forgot password?
@@ -124,27 +124,6 @@ const Login: React.FC = () => {
               )}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Don't have an account?{' '}
-              <Link
-                to="/register"
-                className="text-blue-600 hover:text-blue-700 font-medium"
-              >
-                Sign up
-              </Link>
-            </p>
-          </div>
-        </div>
-
-        {/* Demo Credentials */}
-        <div className="mt-6 bg-blue-50 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-blue-800 mb-2">Demo Credentials:</h3>
-          <div className="text-xs text-blue-600 space-y-1">
-            <p><strong>Phone:</strong> +998900000000</p>
-            <p><strong>Password:</strong> password123</p>
-          </div>
         </div>
       </div>
     </div>

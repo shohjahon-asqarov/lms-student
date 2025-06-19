@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
@@ -11,11 +11,106 @@ import {
   Calendar
 } from 'lucide-react';
 import { QuizFinishResponse } from '../types';
+import { sendTelegramResult } from '../utils/telegram';
+import { toast } from 'react-toastify';
+
+function getScoreColor(percentage: number) {
+  if (percentage >= 80) return 'text-green-600';
+  if (percentage >= 60) return 'text-yellow-600';
+  return 'text-red-600';
+}
+
+function getScoreBgColor(percentage: number) {
+  if (percentage >= 80) return 'bg-green-100';
+  if (percentage >= 60) return 'bg-yellow-100';
+  return 'bg-red-100';
+}
+
+function getPerformanceLabel(percentage: number) {
+  if (percentage >= 80) return 'Excellent';
+  if (percentage >= 60) return 'Good';
+  if (percentage >= 40) return 'Fair';
+  return 'Needs Improvement';
+}
+
+function renderScoreCard(percentage: number, correctAnswers: number, totalQuestions: number, incorrectAnswers: number) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* Score */}
+      <div className="text-center">
+        <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full ${getScoreBgColor(percentage)} mb-4`}>
+          <span className={`text-2xl font-bold ${getScoreColor(percentage)}`}>{percentage}%</span>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Score</h3>
+        <p className="text-gray-600">{correctAnswers} / {totalQuestions} correct</p>
+      </div>
+      {/* Correct Answers */}
+      <div className="text-center">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-4">
+          <CheckCircle className="w-8 h-8 text-green-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Correct</h3>
+        <p className="text-green-600 font-bold text-xl">{correctAnswers}</p>
+      </div>
+      {/* Incorrect Answers */}
+      <div className="text-center">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-100 mb-4">
+          <XCircle className="w-8 h-8 text-red-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Incorrect</h3>
+        <p className="text-red-600 font-bold text-xl">{incorrectAnswers}</p>
+      </div>
+      {/* Performance */}
+      <div className="text-center">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-purple-100 mb-4">
+          <BarChart3 className="w-8 h-8 text-purple-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Performance</h3>
+        <p className={`font-medium ${getScoreColor(percentage)}`}>{getPerformanceLabel(percentage)}</p>
+      </div>
+    </div>
+  );
+}
+
+function renderQuestionDetails(result: QuizFinishResponse) {
+  return (
+    <div className="space-y-4">
+      {result.data.map((questionResult, index) => (
+        <div key={questionResult.id} className="border border-gray-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-1">
+              {questionResult.user_result ? (
+                <CheckCircle className="w-5 h-5 text-green-600" />
+              ) : (
+                <XCircle className="w-5 h-5 text-red-600" />
+              )}
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-medium text-gray-900">Question {index + 1}</h4>
+                <span className={`text-sm font-medium ${questionResult.user_result ? 'text-green-600' : 'text-red-600'}`}>
+                  {questionResult.user_result ? 'Correct' : 'Incorrect'}
+                </span>
+              </div>
+              <p className="text-gray-900 mb-2">{questionResult.text}</p>
+              <div className="bg-gray-50 rounded p-3">
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Correct Answer:</span> {questionResult.result.text}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const Results: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+  const [telegramSent, setTelegramSent] = useState(false);
 
   // Get result from location state
   const result: QuizFinishResponse = location.state?.result;
@@ -43,17 +138,17 @@ const Results: React.FC = () => {
   const incorrectAnswers = result.inCorrentCount;
   const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
 
-  const getScoreColor = (percentage: number) => {
-    if (percentage >= 80) return 'text-green-600';
-    if (percentage >= 60) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-
-  const getScoreBgColor = (percentage: number) => {
-    if (percentage >= 80) return 'bg-green-100';
-    if (percentage >= 60) return 'bg-yellow-100';
-    return 'bg-red-100';
-  };
+  async function handleSendTelegram() {
+    const userName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : 'Unknown';
+    const message = `📊 <b>Quiz Result</b>\n\n👤 User: ${userName}\n✅ Correct: ${correctAnswers}\n❌ Incorrect: ${incorrectAnswers}\n📈 Score: ${percentage}%`;
+    try {
+      await sendTelegramResult(message);
+      setTelegramSent(true);
+      toast.success('Result sent to Telegram!');
+    } catch (e) {
+      toast.error('Failed to send result to Telegram.');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -82,96 +177,16 @@ const Results: React.FC = () => {
         {/* Score Card */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Quiz Completed!
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Quiz Completed!</h1>
             <p className="text-gray-600">Here are your results</p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Score */}
-            <div className="text-center">
-              <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full ${getScoreBgColor(percentage)} mb-4`}>
-                <span className={`text-2xl font-bold ${getScoreColor(percentage)}`}>
-                  {percentage}%
-                </span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Score</h3>
-              <p className="text-gray-600">
-                {correctAnswers} / {totalQuestions} correct
-              </p>
-            </div>
-
-            {/* Correct Answers */}
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-4">
-                <CheckCircle className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Correct</h3>
-              <p className="text-green-600 font-bold text-xl">{correctAnswers}</p>
-            </div>
-
-            {/* Incorrect Answers */}
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-100 mb-4">
-                <XCircle className="w-8 h-8 text-red-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Incorrect</h3>
-              <p className="text-red-600 font-bold text-xl">{incorrectAnswers}</p>
-            </div>
-
-            {/* Performance */}
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-purple-100 mb-4">
-                <BarChart3 className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Performance</h3>
-              <p className={`font-medium ${getScoreColor(percentage)}`}>
-                {percentage >= 80 ? 'Excellent' : 
-                 percentage >= 60 ? 'Good' : 
-                 percentage >= 40 ? 'Fair' : 'Needs Improvement'}
-              </p>
-            </div>
-          </div>
+          {renderScoreCard(percentage, correctAnswers, totalQuestions, incorrectAnswers)}
         </div>
 
         {/* Detailed Results */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Question Details</h2>
-          
-          <div className="space-y-4">
-            {result.data.map((questionResult, index) => (
-              <div key={questionResult.id} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 mt-1">
-                    {questionResult.user_result ? (
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                    ) : (
-                      <XCircle className="w-5 h-5 text-red-600" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-gray-900">
-                        Question {index + 1}
-                      </h4>
-                      <span className={`text-sm font-medium ${
-                        questionResult.user_result ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {questionResult.user_result ? 'Correct' : 'Incorrect'}
-                      </span>
-                    </div>
-                    <p className="text-gray-900 mb-2">{questionResult.text}</p>
-                    <div className="bg-gray-50 rounded p-3">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">Correct Answer:</span> {questionResult.result.text}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {renderQuestionDetails(result)}
         </div>
 
         {/* Actions */}
@@ -187,6 +202,13 @@ const Results: React.FC = () => {
             className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
           >
             View All Results
+          </button>
+          <button
+            onClick={() => handleSendTelegram()}
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-60"
+            disabled={telegramSent}
+          >
+            {telegramSent ? 'Sent!' : 'Send to Telegram'}
           </button>
         </div>
       </div>
