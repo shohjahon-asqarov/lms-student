@@ -13,6 +13,7 @@ import {
   Users,
   ArrowRight
 } from 'lucide-react';
+import { sendTelegramResult } from '../utils/telegram';
 
 const Quizzes: React.FC = () => {
   const { user } = useAuth();
@@ -151,7 +152,12 @@ const Quizzes: React.FC = () => {
             {/* Actions */}
             <div className="flex gap-2 pt-4 border-t border-gray-100">
               <button
-                onClick={() => navigate(`/take-quiz/${quiz.id}`)}
+                onClick={() => navigate(`/take-quiz/${quiz.id}`, {
+                  state: {
+                    duration: quiz.duration,
+                    quizData: quiz  // Pass full quiz data
+                  }
+                })}
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Start

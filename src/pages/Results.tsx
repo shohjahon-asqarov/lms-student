@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useQuiz } from '../hooks/useQueries';
 import {
   CheckCircle,
   XCircle,
@@ -8,7 +9,8 @@ import {
   Award,
   ArrowLeft,
   BarChart3,
-  Calendar
+  Calendar,
+  Send
 } from 'lucide-react';
 import { QuizFinishResponse } from '../types';
 import { sendTelegramResult } from '../utils/telegram';
@@ -112,8 +114,9 @@ const Results: React.FC = () => {
   const { user } = useAuth();
   const [telegramSent, setTelegramSent] = useState(false);
 
-  // Get result from location state
+  // Get result and quiz data from location state
   const result: QuizFinishResponse = location.state?.result;
+  const quizData = location.state?.quizData;
 
   if (!result) {
     return (
@@ -138,13 +141,59 @@ const Results: React.FC = () => {
   const incorrectAnswers = result.inCorrentCount;
   const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
 
+  const formatDate = (date: Date) => {
+    const months = [
+      'yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun',
+      'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'
+    ];
+    const weekdays = [
+      'Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba',
+      'Payshanba', 'Juma', 'Shanba'
+    ];
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const weekday = weekdays[date.getDay()];
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${weekday}, ${day} ${month} ${year} | ${hours}:${minutes}`;
+  };
+
+  const currentDate = formatDate(new Date());
+
   async function handleSendTelegram() {
     const userName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : 'Unknown';
-    const message = `📊 <b>Quiz Result</b>\n\n👤 User: ${userName}\n✅ Correct: ${correctAnswers}\n❌ Incorrect: ${incorrectAnswers}\n📈 Score: ${percentage}%`;
+    const userPhone = user?.phone || 'Unknown';
+
+    const message = `📊 <b>Quiz Result - Detailed Report</b>\n\n` +
+      `👤 <b>User Information:</b>\n` +
+      `   • Name: ${userName}\n` +
+      `   • Phone: ${userPhone}\n` +
+      `   • Role: ${user?.role || 'Unknown'}\n\n` +
+      `📝 <b>Quiz Information:</b>\n` +
+      `   • Title: ${quizData?.title || 'Unknown Quiz'}\n` +
+      `   • Duration: ${quizData?.duration || 'Unknown'} minutes\n` +
+      `   • Difficulty: ${quizData?.difficulty || 'Unknown'}\n` +
+      `   • Status: ${quizData?.status || 'Unknown'}\n` +
+      `   • Created: ${quizData?.createdAt ? new Date(quizData.createdAt).toLocaleDateString('uz-UZ') : 'Unknown'}\n\n` +
+      `📈 <b>Performance Results:</b>\n` +
+      `   • Score: ${percentage}%\n` +
+      `   • Correct Answers: ${correctAnswers}/${totalQuestions}\n` +
+      `   • Incorrect Answers: ${incorrectAnswers}/${totalQuestions}\n` +
+      `   • Performance: ${getPerformanceLabel(percentage)}\n\n` +
+      `⏰ <b>Completion Time:</b>\n` +
+      `   • ${currentDate}\n\n` +
+      `🎯 <b>Detailed Breakdown:</b>\n` +
+      `   • Questions Answered: ${totalQuestions}\n` +
+      `   • Success Rate: ${((correctAnswers / totalQuestions) * 100).toFixed(1)}%\n` +
+      `   • Error Rate: ${((incorrectAnswers / totalQuestions) * 100).toFixed(1)}%`;
+
     try {
       await sendTelegramResult(message);
       setTelegramSent(true);
-      toast.success('Result sent to Telegram!');
+      toast.success('Detailed result sent to Telegram!');
     } catch (e) {
       toast.error('Failed to send result to Telegram.');
     }
@@ -183,6 +232,31 @@ const Results: React.FC = () => {
           {renderScoreCard(percentage, correctAnswers, totalQuestions, incorrectAnswers)}
         </div>
 
+        {/* Quiz Information Card */}
+        {quizData && (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Quiz Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-gray-600">Quiz Title</p>
+                <p className="font-medium text-gray-900">{quizData.title}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Duration</p>
+                <p className="font-medium text-gray-900">{quizData.duration} minutes</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Difficulty</p>
+                <p className="font-medium text-gray-900">{quizData.difficulty || 'Not specified'}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Status</p>
+                <p className="font-medium text-gray-900">{quizData.status}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Detailed Results */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Question Details</h2>
@@ -205,10 +279,11 @@ const Results: React.FC = () => {
           </button>
           <button
             onClick={() => handleSendTelegram()}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-60"
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-60 flex items-center gap-2"
             disabled={telegramSent}
           >
-            {telegramSent ? 'Sent!' : 'Send to Telegram'}
+            <Send className="w-4 h-4" />
+            {telegramSent ? 'Sent!' : 'Send Detailed Report'}
           </button>
         </div>
       </div>

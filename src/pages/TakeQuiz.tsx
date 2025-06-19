@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useStartQuiz, useFinishQuiz } from '../hooks/useQueries';
-import { useAuth } from '../hooks/useAuth';
 import {
     Clock,
     FileText,
@@ -17,14 +16,13 @@ import { Question, QuizSubmission } from '../types';
 import { quizConfig } from '../config/env';
 
 // Environment variables for quiz settings
-const DEFAULT_QUIZ_DURATION = parseInt(import.meta.env.VITE_DEFAULT_QUIZ_DURATION || '30');
 
 const TakeQuiz: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { user } = useAuth();
     const startQuizMutation = useStartQuiz();
     const finishQuizMutation = useFinishQuiz();
+    const location = useLocation();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string[]>>({});
@@ -54,10 +52,17 @@ const TakeQuiz: React.FC = () => {
 
     // Fetch quiz data when component mounts
     useEffect(() => {
+        // If duration is passed via location state, use it for timer
+        if (location.state?.duration) {
+            const durationInMinutes = location.state.duration;
+            setTimeRemaining(durationInMinutes * 60);
+        }
+
+        // Always fetch quiz data from API
         if (id && !quizData && !startQuizMutation.isPending) {
             handleStartQuiz();
         }
-    }, [id, quizData, startQuizMutation.isPending]);
+    }, [id, quizData, startQuizMutation.isPending, location.state]);
 
     const handleStartQuiz = useCallback(async () => {
         if (!id || quizData) return;
@@ -67,16 +72,16 @@ const TakeQuiz: React.FC = () => {
             const session = await startQuizMutation.mutateAsync(id);
             setQuizData(session);
 
-            // Set initial time from duration (convert minutes to seconds)
-            // Assuming the API response includes duration in minutes
-            const durationInMinutes = session.duration || quizConfig.defaultDuration;
-
-            setTimeRemaining(durationInMinutes * 60); // Convert to seconds
+            // Only set timeRemaining if not already set from location state
+            if (!location.state?.duration) {
+                const durationInMinutes = session.duration || quizConfig.defaultDuration;
+                setTimeRemaining(durationInMinutes * 60);
+            }
         } catch (err: any) {
             console.error('Failed to start quiz:', err);
             setError(err.response?.data?.message || 'Failed to start quiz. Please try again.');
         }
-    }, [id, quizData, startQuizMutation]);
+    }, [id, quizData, startQuizMutation, location.state]);
 
     // Timer effect
     useEffect(() => {
@@ -144,18 +149,19 @@ const TakeQuiz: React.FC = () => {
                 quizId: id,
                 questions: questions.map(question => ({
                     questionId: question.id,
-                    questionType: 'multiple_choice', // Assuming all questions are multiple choice
+                    questionType: 'multiple_choice',
                     answers: selectedAnswers[question.id] || []
                 }))
             };
 
             const result = await finishQuizMutation.mutateAsync(submission);
 
-            // Navigate to results page with the result
-            // Since /quiz/finish returns the result directly, we can use it immediately
+            // Pass both result and quiz data to Results page
             navigate(`/results`, {
                 state: {
                     result,
+                    quizId: id,
+                    quizData: location.state?.quizData,
                     fromQuiz: true
                 }
             });
@@ -165,7 +171,7 @@ const TakeQuiz: React.FC = () => {
         } finally {
             setIsSubmitting(false);
         }
-    }, [isSubmitting, id, questions, selectedAnswers, finishQuizMutation, navigate]);
+    }, [isSubmitting, id, questions, selectedAnswers, finishQuizMutation, navigate, location.state]);
 
     // Loading state
     if (startQuizMutation.isPending) {
@@ -209,6 +215,8 @@ const TakeQuiz: React.FC = () => {
         );
     }
 
+    console.log(currentQuestion, quizData);
+
     if (!currentQuestion || !quizData) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -226,6 +234,7 @@ const TakeQuiz: React.FC = () => {
             </div>
         );
     }
+
 
     return (
         <div className="min-h-screen bg-gray-50">
