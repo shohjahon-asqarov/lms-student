@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FileText, CheckCircle, XCircle, Loader2, X, ChevronDown, ChevronUp, Star, Award, Trophy, Repeat, ListChecks } from 'lucide-react';
 import { useMyQuizResult } from '../hooks/useQueries';
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LabelList } from 'recharts';
 
 const MyQuizResult: React.FC = () => {
     const { quizId } = useParams<{ quizId: string }>();
@@ -53,10 +54,90 @@ const MyQuizResult: React.FC = () => {
     // Motivational banner
     const getMotivation = (percentage: number) => {
         if (percentage >= 90) return { text: 'Ajoyib natija! 👏', icon: <Star className="inline w-7 h-7 text-yellow-400" />, color: 'bg-yellow-50 text-yellow-700' };
-        if (percentage >= 70) return { text: 'Zo‘r! Yana ham yaxshilash mumkin!', icon: <Award className="inline w-7 h-7 text-blue-400" />, color: 'bg-blue-50 text-blue-700' };
+        if (percentage >= 70) return { text: "Zo'r! Yana ham yaxshilash mumkin!", icon: <Award className="inline w-7 h-7 text-blue-400" />, color: 'bg-blue-50 text-blue-700' };
         if (percentage >= 50) return { text: 'Yaxshi! Yana harakat qiling!', icon: <Trophy className="inline w-7 h-7 text-green-500" />, color: 'bg-green-50 text-green-700' };
         return { text: 'Boshlanishi yaxshi! Mashqni davom eting!', icon: <Repeat className="inline w-7 h-7 text-gray-400" />, color: 'bg-gray-50 text-gray-700' };
     };
+
+    // Pie chart: barcha urinishlar bo'yicha umumiy natija
+    const totalCorrect = results.reduce((sum: number, r: any) => sum + (r.studentCorrentcts?.length || 0), 0);
+    const totalQuestions = results.reduce((sum: number, r: any) => sum + (r.questions?.length || 0), 0);
+    const totalIncorrect = totalQuestions - totalCorrect;
+    const hasPieData = totalQuestions > 0;
+    const pieData = hasPieData
+        ? [
+            { name: "To'g'ri", value: totalCorrect },
+            { name: "Noto'g'ri", value: totalIncorrect }
+        ]
+        : [];
+    const pieColors = ['#22c55e', '#ef4444'];
+    const mainPercentage = hasPieData ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+    // Bar chart: har bir urinish uchun to'g'ri, noto'g'ri, savollar soni va foiz
+    const barData = results.map((r: any, idx: number) => ({
+        name: idx === 0 ? 'Asosiy' : `Urinish ${idx + 1}`,
+        Foiz: typeof r.percentage === 'number' && !isNaN(r.percentage) ? r.percentage : 0,
+        Togri: r.studentCorrentcts?.length || 0,
+        Savollar: r.questions?.length || 0,
+        Notogri: (r.questions?.length || 0) - (r.studentCorrentcts?.length || 0)
+    }));
+
+    // Faqat haqiqiy foizlarni olish
+    const validPercentages = results
+        .map((r: any) => typeof r.percentage === 'number' && !isNaN(r.percentage) ? r.percentage : null)
+        .filter((p: number | null) => p !== null) as number[];
+    const avgPercentage = validPercentages.length
+        ? Math.round(validPercentages.reduce((sum, p) => sum + p, 0) / validPercentages.length)
+        : 0;
+
+    // Eng yaxshi natija
+    const bestResult = results.reduce(
+        (max: any, r: any) =>
+            typeof r.percentage === 'number' && (!max || r.percentage > max.percentage) ? r : max,
+        null
+    );
+    const bestScore = bestResult?.percentage || 0;
+    const lastAttemptDate = results.length ? results[results.length - 1]?.createdAt : null;
+
+    // Statistik bloklar uchun massiv
+    const stats = [
+        {
+            label: "O'rtacha foiz",
+            value: avgPercentage + '%',
+            icon: <ListChecks className="w-6 h-6 text-blue-500" />,
+            bg: 'bg-gradient-to-br from-blue-100 to-blue-50',
+        },
+        {
+            label: 'Urinishlar',
+            value: results.length,
+            icon: <Repeat className="w-6 h-6 text-yellow-500" />,
+            bg: 'bg-gradient-to-br from-yellow-100 to-yellow-50',
+        },
+        {
+            label: 'Eng yaxshi natija',
+            value: bestScore + '%',
+            icon: <Trophy className="w-6 h-6 text-purple-500" />,
+            bg: 'bg-gradient-to-br from-purple-100 to-purple-50',
+        },
+        {
+            label: 'Oxirgi urinish',
+            value: lastAttemptDate ? new Date(lastAttemptDate).toLocaleString() : '—',
+            icon: <Award className="w-6 h-6 text-pink-500" />,
+            bg: 'bg-gradient-to-br from-pink-100 to-pink-50',
+        },
+        {
+            label: "To'g'ri javoblar (umumiy)",
+            value: totalCorrect + ' / ' + totalQuestions,
+            icon: <CheckCircle className="w-6 h-6 text-green-500" />,
+            bg: 'bg-gradient-to-br from-green-100 to-green-50',
+        },
+        {
+            label: "Noto'g'ri javoblar (umumiy)",
+            value: totalIncorrect,
+            icon: <XCircle className="w-6 h-6 text-red-500" />,
+            bg: 'bg-gradient-to-br from-red-100 to-red-50',
+        },
+    ];
 
     // Card rendering helper
     const renderResultCard = (result: any, idx: number, label?: string) => {
@@ -195,6 +276,138 @@ const MyQuizResult: React.FC = () => {
     return (
         <div className="w-full py-8 px-2 sm:px-8 fade-in space-y-10">
             <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">Mening test natijam</h1>
+            {/* STATISTIKA BLOKI */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+                {stats.map((s, i) => (
+                    <div
+                        key={i}
+                        className={`flex flex-col items-center justify-center p-4 rounded-2xl shadow-md transition-all duration-200 ${s.bg} hover:shadow-xl hover:-translate-y-1 border border-gray-100 relative overflow-hidden`}
+                    >
+                        <div className="mb-2 flex items-center justify-center w-12 h-12 rounded-full shadow bg-white/80">
+                            {s.icon}
+                        </div>
+                        <div className="text-2xl font-extrabold text-gray-900">{s.value}</div>
+                        <div className="text-xs text-gray-500 text-center mt-1">{s.label}</div>
+                    </div>
+                ))}
+            </div>
+            {/* CHARTLAR BLOKI */}
+            <div className="flex flex-col gap-6 mb-8">
+                {/* Donut chart */}
+                <div className="dashboard-card flex flex-col items-center w-full p-6 animate-fade-in bg-gradient-to-br from-green-50 to-blue-50 shadow-xl">
+                    <div className="text-base font-semibold text-gray-900 mb-4">Umumiy natija (donut chart)</div>
+                    {hasPieData ? (
+                        <ResponsiveContainer width={280} height={280}>
+                            <PieChart>
+                                <Pie
+                                    data={pieData}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={80}
+                                    outerRadius={120}
+                                    paddingAngle={7}
+                                    startAngle={90}
+                                    endAngle={-270}
+                                    stroke="#fff"
+                                    isAnimationActive={true}
+                                    cornerRadius={12}
+                                >
+                                    {pieData.map((entry, idx) => (
+                                        <Cell key={`cell-${idx}`} fill={pieColors[idx % pieColors.length]} />
+                                    ))}
+                                </Pie>
+                                {/* Custom center content */}
+                                <text
+                                    x="50%"
+                                    y="50%"
+                                    textAnchor="middle"
+                                    dominantBaseline="middle"
+                                    fontSize="36"
+                                    fontWeight="bold"
+                                    fill="#1e293b"
+                                >
+                                    {mainPercentage}%
+                                </text>
+                                <text
+                                    x="50%"
+                                    y="62%"
+                                    textAnchor="middle"
+                                    fontSize="15"
+                                    fill="#64748b"
+                                >
+                                    Umumiy natija
+                                </text>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-[280px]">
+                            <span className="text-gray-400 text-base font-semibold">Ma'lumot yo'q</span>
+                        </div>
+                    )}
+                    <div className="flex gap-5 mt-4 text-sm">
+                        <span className="inline-flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span> To'g'ri</span>
+                        <span className="inline-flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-red-500 inline-block"></span> Noto'g'ri</span>
+                    </div>
+                </div>
+                {/* Grouped Bar chart */}
+                <div className="dashboard-card flex flex-col items-center w-full p-6 animate-fade-in bg-gradient-to-br from-blue-50 to-purple-50 shadow-xl">
+                    <div className="text-base font-semibold text-gray-900 mb-4">Urinishlar bo'yicha natijalar (grouped bar)</div>
+                    {barData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height={260}>
+                            <BarChart data={barData} barCategoryGap={22}>
+                                <XAxis dataKey="name" fontSize={14} />
+                                <YAxis fontSize={14} />
+                                <Tooltip
+                                    content={({ active, payload }) => {
+                                        if (active && payload && payload.length) {
+                                            const d = payload[0].payload;
+                                            return (
+                                                <div className="rounded-xl shadow-lg bg-white/95 p-3 min-w-[160px]">
+                                                    <div className="font-bold text-gray-900 mb-2 text-base">{d.name}</div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                                                            <span className="text-xs text-gray-700">To'g'ri:</span>
+                                                            <span className="font-bold text-green-700">{d.Togri}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="inline-block w-2 h-2 rounded-full bg-red-500"></span>
+                                                            <span className="text-xs text-gray-700">Noto'g'ri:</span>
+                                                            <span className="font-bold text-red-600">{d.Notogri}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+                                                            <span className="text-xs text-gray-700">Savollar:</span>
+                                                            <span className="font-bold text-blue-700">{d.Savollar}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="inline-block w-2 h-2 rounded-full bg-purple-500"></span>
+                                                            <span className="text-xs text-gray-700">Foiz:</span>
+                                                            <span className="font-bold text-purple-700">{d.Foiz}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    }}
+                                    contentStyle={{ borderRadius: 16, fontSize: 14, boxShadow: '0 4px 24px 0 rgba(0,0,0,0.08)' }}
+                                />
+                                <Legend iconType="circle" />
+                                <Bar dataKey="Togri" fill="#22c55e" radius={[7, 7, 0, 0]} name="To'g'ri" />
+                                <Bar dataKey="Notogri" fill="#ef4444" radius={[7, 7, 0, 0]} name="Noto'g'ri" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-[260px]">
+                            <span className="text-gray-400 text-base font-semibold">Ma'lumot yo'q</span>
+                        </div>
+                    )}
+                </div>
+            </div>
+            {/* CHARTLAR BLOKI YAKUNI */}
             {mainResult && renderResultCard(mainResult, 0, 'Asosiy natija')}
             {attemptResults.length > 0 && (
                 <div className="space-y-6">
