@@ -46,7 +46,11 @@ class ApiService {
     this.api.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response?.status === 401) {
+        if (
+          error.response?.status === 401 &&
+          error.config &&
+          !error.config.url.includes("/auth/login")
+        ) {
           localStorage.removeItem(authConfig.tokenKey);
           localStorage.removeItem(authConfig.userDataKey);
           window.location.href = authConfig.loginRedirectUrl;

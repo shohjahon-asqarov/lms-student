@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { BookOpen, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -66,7 +67,9 @@ const Login: React.FC = () => {
     try {
       await login({ phone: getRawPhone(phone), password });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      const message = err.response?.data?.message || 'Login yoki parol xato. Iltimos, qayta urinib ko‘ring.';
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -86,7 +89,7 @@ const Login: React.FC = () => {
 
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" autoComplete="on">
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <p className="text-red-700 text-sm">{error}</p>
@@ -106,6 +109,8 @@ const Login: React.FC = () => {
                 placeholder="+998 (99) 123-45-67"
                 required
                 maxLength={19}
+                autoComplete="username"
+                name="username"
               />
             </div>
 
@@ -122,6 +127,8 @@ const Login: React.FC = () => {
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   placeholder="Parolingizni kiriting"
                   required
+                  autoComplete="current-password"
+                  name="password"
                 />
                 <button
                   type="button"
