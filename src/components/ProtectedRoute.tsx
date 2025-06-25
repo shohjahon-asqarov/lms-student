@@ -7,9 +7,9 @@ interface ProtectedRouteProps {
   requiredRoles?: string[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  requiredRoles = [] 
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requiredRoles = []
 }) => {
   const { isAuthenticated, user, isLoading } = useAuth();
   const location = useLocation();
@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="loading-spinner mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">Yuklanmoqda...</p>
         </div>
       </div>
     );
@@ -33,8 +33,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h2>
-          <p className="text-gray-600">You don't have permission to access this page.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ruxsat yo‘q</h2>
+          <p className="text-gray-600">Sizda bu sahifaga kirish uchun ruxsat yo‘q.</p>
         </div>
       </div>
     );

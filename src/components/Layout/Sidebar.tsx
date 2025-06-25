@@ -30,28 +30,28 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     },
     {
       path: '/quizzes',
-      label: 'Available Quizzes',
+      label: 'Mavjud testlar',
       icon: FileText,
       roles: ['STUDENT']
     },
     {
       path: '/results',
-      label: 'My Results',
+      label: 'Natijalarim',
       icon: BarChart3,
       roles: ['STUDENT']
     },
-    {
-      path: '/profile',
-      label: 'Profile',
-      icon: User,
-      roles: ['STUDENT']
-    },
-    {
-      path: '/settings',
-      label: 'Settings',
-      icon: Settings,
-      roles: ['STUDENT']
-    },
+    // {
+    //   path: '/profile',
+    //   label: 'Profil',
+    //   icon: User,
+    //   roles: ['STUDENT']
+    // },
+    // {
+    //   path: '/settings',
+    //   label: 'Sozlamalar',
+    //   icon: Settings,
+    //   roles: ['STUDENT']
+    // },
   ];
 
   const filteredMenuItems = menuItems.filter(item =>
@@ -87,8 +87,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <BookOpen className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Student Portal</h1>
-              <p className="text-sm text-gray-500">Quiz Learning Platform</p>
+              <h1 className="text-xl font-bold text-gray-900">Talaba portali</h1>
+              <p className="text-sm text-gray-500">Test o‘rganish platformasi</p>
             </div>
           </div>
         </div>
@@ -101,9 +101,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">
-                {user?.firstName || 'Student'} {user?.lastName || ''}
+                {user?.firstName || 'Talaba'} {user?.lastName || ''}
               </p>
-              <p className="text-xs text-gray-500">Student</p>
+              <p className="text-xs text-gray-500">Talaba</p>
             </div>
           </div>
         </div>
@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
           >
             <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+            <span className="font-medium">Chiqish</span>
           </button>
         </div>
       </div>

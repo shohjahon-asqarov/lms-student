@@ -175,8 +175,8 @@ const TakeQuiz: React.FC = () => {
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <Loader2 className="w-16 h-16 text-blue-600 mx-auto mb-4 animate-spin" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Starting Quiz...</h2>
-                    <p className="text-gray-600">Please wait while we load your quiz.</p>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Test boshlanmoqda...</h2>
+                    <p className="text-gray-600">Iltimos, test yuklanishini kuting.</p>
                 </div>
             </div>
         );
@@ -188,22 +188,22 @@ const TakeQuiz: React.FC = () => {
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Failed to Start Quiz</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Testni boshlashda xatolik</h2>
                     <p className="text-gray-600 mb-4">
-                        {error || 'An error occurred while starting the quiz.'}
+                        {error || 'Testni boshlashda xatolik yuz berdi.'}
                     </p>
                     <div className="flex items-center justify-center gap-4">
                         <button
                             onClick={handleStartQuiz}
                             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
                         >
-                            Try Again
+                            Qayta urinib ko‘ring
                         </button>
                         <button
                             onClick={() => navigate('/quizzes')}
                             className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700"
                         >
-                            Back to Quizzes
+                            Testlar ro‘yxatiga qaytish
                         </button>
                     </div>
                 </div>
@@ -218,13 +218,13 @@ const TakeQuiz: React.FC = () => {
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Quiz Not Found</h2>
-                    <p className="text-gray-600 mb-4">The quiz you're looking for doesn't exist or has expired.</p>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Test topilmadi</h2>
+                    <p className="text-gray-600 mb-4">Siz izlayotgan test mavjud emas yoki muddati tugagan.</p>
                     <button
                         onClick={() => navigate('/quizzes')}
                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
                     >
-                        Go Back to Quizzes
+                        Testlar ro‘yxatiga qaytish
                     </button>
                 </div>
             </div>
@@ -243,18 +243,18 @@ const TakeQuiz: React.FC = () => {
                             className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
                         >
                             <ArrowLeft className="w-5 h-5" />
-                            Back to Quizzes
+                            Testlar ro‘yxatiga qaytish
                         </button>
                         <div className="h-6 w-px bg-gray-300" />
                         <div className="flex items-center gap-2">
                             <FileText className="w-5 h-5 text-blue-600" />
-                            <span className="font-medium text-gray-900">Quiz in Progress</span>
+                            <span className="font-medium text-gray-900">Test davom etmoqda</span>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
+                            <span>{currentQuestionIndex + 1}-savol / {questions.length} ta</span>
                         </div>
                         <div className="flex items-center gap-2 text-lg font-bold text-red-600">
                             <Clock className="w-5 h-5" />
@@ -336,7 +336,7 @@ const TakeQuiz: React.FC = () => {
                         className="flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <ArrowLeft className="w-5 h-5" />
-                        Previous
+                        Oldingi
                     </button>
 
                     <div className="flex items-center gap-3">
@@ -346,7 +346,7 @@ const TakeQuiz: React.FC = () => {
                                 disabled={!hasAnsweredCurrent}
                                 className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Next
+                                Keyingi
                                 <ArrowRight className="w-5 h-5" />
                             </button>
                         ) : (
@@ -358,12 +358,12 @@ const TakeQuiz: React.FC = () => {
                                 {isSubmitting ? (
                                     <>
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                        Submitting...
+                                        Yuborilmoqda...
                                     </>
                                 ) : (
                                     <>
                                         <Send className="w-5 h-5" />
-                                        Submit Quiz
+                                        Testni yakunlash
                                     </>
                                 )}
                             </button>
@@ -373,7 +373,7 @@ const TakeQuiz: React.FC = () => {
 
                 {/* Question Navigation */}
                 <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Question Navigation</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Savollar bo‘yicha harakat</h3>
                     <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
                         {questions.map((_, index) => {
                             const questionId = questions[index].id;

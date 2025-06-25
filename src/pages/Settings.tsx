@@ -1,11 +1,11 @@
 import React from 'react';
 import { useUserSettings, useUpdateUserSettings } from '../hooks/useQueries';
-import { 
-  Palette, 
-  Globe, 
-  Bell, 
-  Mail, 
-  Moon, 
+import {
+  Palette,
+  Globe,
+  Bell,
+  Mail,
+  Moon,
   Sun,
   Monitor,
   Check
@@ -65,7 +65,7 @@ const Settings: React.FC = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600">Manage your preferences and account settings</p>
+        <p className="text-gray-600">Sozlamalaringiz va akkaunt sozlamalarini boshqaring</p>
       </div>
 
       {/* Theme Settings */}
@@ -76,31 +76,30 @@ const Settings: React.FC = () => {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Appearance</h2>
-            <p className="text-sm text-gray-600">Customize how the app looks to you</p>
+            <p className="text-sm text-gray-600">Ilovaning ko‘rinishini moslang</p>
           </div>
         </div>
 
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-gray-700">Theme</h3>
+          <h3 className="text-sm font-medium text-gray-700">Mavzu</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {themes.map((theme) => {
               const Icon = theme.icon;
               const isSelected = settings?.theme === theme.value;
-              
+
               return (
                 <button
                   key={theme.value}
                   onClick={() => handleThemeChange(theme.value as 'light' | 'dark')}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
-                    isSelected
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${isSelected
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      isSelected ? 'bg-blue-100' : 'bg-gray-100'
-                    }`}>
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isSelected ? 'bg-blue-100' : 'bg-gray-100'
+                      }`}>
                       <Icon className={`w-5 h-5 ${isSelected ? 'text-blue-600' : 'text-gray-600'}`} />
                     </div>
                     <div className="flex-1">
@@ -126,25 +125,25 @@ const Settings: React.FC = () => {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Language & Region</h2>
-            <p className="text-sm text-gray-600">Choose your preferred language</p>
+            <p className="text-sm text-gray-600">Tilni tanlang</p>
           </div>
         </div>
 
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-gray-700">Display Language</h3>
+          <h3 className="text-sm font-medium text-gray-700">Ko‘rsatiladigan til</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {languages.map((language) => {
               const isSelected = settings?.language === language.value;
-              
+
               return (
                 <button
                   key={language.value}
                   onClick={() => handleLanguageChange(language.value as 'en' | 'uz' | 'ru')}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
-                    isSelected
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${isSelected
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{language.flag}</span>
@@ -170,7 +169,7 @@ const Settings: React.FC = () => {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Notifications</h2>
-            <p className="text-sm text-gray-600">Manage how you receive notifications</p>
+            <p className="text-sm text-gray-600">Bildirishnomalarni boshqarish</p>
           </div>
         </div>
 
@@ -180,7 +179,7 @@ const Settings: React.FC = () => {
               <Bell className="w-5 h-5 text-gray-400" />
               <div>
                 <p className="font-medium text-gray-900">Push Notifications</p>
-                <p className="text-sm text-gray-600">Get notified about new quizzes and results</p>
+                <p className="text-sm text-gray-600">Yangi testlar va natijalar haqida xabardor bo‘ling</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -199,7 +198,7 @@ const Settings: React.FC = () => {
               <Mail className="w-5 h-5 text-gray-400" />
               <div>
                 <p className="font-medium text-gray-900">Email Updates</p>
-                <p className="text-sm text-gray-600">Receive email notifications about important updates</p>
+                <p className="text-sm text-gray-600">Muhim yangiliklar haqida email xabarnoma oling</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -223,7 +222,7 @@ const Settings: React.FC = () => {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Data & Privacy</h2>
-            <p className="text-sm text-gray-600">Manage your data and privacy settings</p>
+            <p className="text-sm text-gray-600">Ma’lumot va maxfiylik sozlamalari</p>
           </div>
         </div>
 
@@ -232,7 +231,7 @@ const Settings: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-gray-900">Download Your Data</p>
-                <p className="text-sm text-gray-600">Get a copy of all your quiz data and results</p>
+                <p className="text-sm text-gray-600">Barcha test ma’lumotlaringiz va natijalaringizni yuklab oling</p>
               </div>
               <div className="text-blue-600">
                 Download
@@ -244,7 +243,7 @@ const Settings: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-red-900">Delete Account</p>
-                <p className="text-sm text-red-600">Permanently delete your account and all data</p>
+                <p className="text-sm text-red-600">Akkauntingiz va barcha ma’lumotlarni butunlay o‘chirish</p>
               </div>
               <div className="text-red-600">
                 Delete

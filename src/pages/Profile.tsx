@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useProfile, useUpdateProfile, useChangePassword } from '../hooks/useQueries';
-import { 
-  User, 
-  Mail, 
-  Lock, 
-  Save, 
+import {
+  User,
+  Mail,
+  Lock,
+  Save,
   Camera,
   Eye,
   EyeOff
@@ -83,7 +83,7 @@ const Profile: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">
               {profile?.firstName} {profile?.lastName}
             </h1>
-            <p className="text-gray-600 capitalize">{profile?.role}</p>
+            <p className="text-gray-600 capitalize">{profile?.role === 'STUDENT' ? 'Talaba' : profile?.role}</p>
             <p className="text-sm text-gray-500">{profile?.email}</p>
           </div>
         </div>
@@ -95,23 +95,21 @@ const Profile: React.FC = () => {
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab('profile')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'profile'
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'profile'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+                }`}
             >
-              Profile Information
+              Profil ma'lumotlari
             </button>
             <button
               onClick={() => setActiveTab('password')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'password'
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'password'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+                }`}
             >
-              Change Password
+              Parolni o'zgartirish
             </button>
           </nav>
         </div>
@@ -123,12 +121,12 @@ const Profile: React.FC = () => {
                 <div>
                   <label className="form-label">
                     <User className="w-4 h-4 inline mr-2" />
-                    First Name
+                    Ism
                   </label>
                   <input
                     {...registerProfile('firstName', { required: 'First name is required' })}
                     className="form-input"
-                    placeholder="Enter your first name"
+                    placeholder="Ismingizni kiriting"
                   />
                   {profileErrors.firstName && (
                     <p className="text-red-500 text-sm mt-1">{profileErrors.firstName.message}</p>
@@ -138,12 +136,12 @@ const Profile: React.FC = () => {
                 <div>
                   <label className="form-label">
                     <User className="w-4 h-4 inline mr-2" />
-                    Last Name
+                    Familiya
                   </label>
                   <input
                     {...registerProfile('lastName', { required: 'Last name is required' })}
                     className="form-input"
-                    placeholder="Enter your last name"
+                    placeholder="Familiyangizni kiriting"
                   />
                   {profileErrors.lastName && (
                     <p className="text-red-500 text-sm mt-1">{profileErrors.lastName.message}</p>
@@ -154,10 +152,10 @@ const Profile: React.FC = () => {
               <div>
                 <label className="form-label">
                   <Mail className="w-4 h-4 inline mr-2" />
-                  Email Address
+                  Elektron pochta
                 </label>
                 <input
-                  {...registerProfile('email', { 
+                  {...registerProfile('email', {
                     required: 'Email is required',
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -165,7 +163,7 @@ const Profile: React.FC = () => {
                     }
                   })}
                   className="form-input"
-                  placeholder="Enter your email"
+                  placeholder="Email manzilingizni kiriting"
                 />
                 {profileErrors.email && (
                   <p className="text-red-500 text-sm mt-1">{profileErrors.email.message}</p>
@@ -183,7 +181,7 @@ const Profile: React.FC = () => {
                   ) : (
                     <Save className="w-4 h-4" />
                   )}
-                  Save Changes
+                  O'zgarishlarni saqlash
                 </button>
               </div>
             </form>
@@ -194,14 +192,14 @@ const Profile: React.FC = () => {
               <div>
                 <label className="form-label">
                   <Lock className="w-4 h-4 inline mr-2" />
-                  Current Password
+                  Joriy parol
                 </label>
                 <div className="relative">
                   <input
                     {...registerPassword('currentPassword', { required: 'Current password is required' })}
                     type={showCurrentPassword ? 'text' : 'password'}
                     className="form-input pr-12"
-                    placeholder="Enter your current password"
+                    placeholder="Joriy parolingizni kiriting"
                   />
                   <button
                     type="button"
@@ -219,17 +217,17 @@ const Profile: React.FC = () => {
               <div>
                 <label className="form-label">
                   <Lock className="w-4 h-4 inline mr-2" />
-                  New Password
+                  Yangi parol
                 </label>
                 <div className="relative">
                   <input
-                    {...registerPassword('newPassword', { 
+                    {...registerPassword('newPassword', {
                       required: 'New password is required',
                       minLength: { value: 6, message: 'Password must be at least 6 characters' }
                     })}
                     type={showNewPassword ? 'text' : 'password'}
                     className="form-input pr-12"
-                    placeholder="Enter your new password"
+                    placeholder="Yangi parolingizni kiriting"
                   />
                   <button
                     type="button"
@@ -247,14 +245,14 @@ const Profile: React.FC = () => {
               <div>
                 <label className="form-label">
                   <Lock className="w-4 h-4 inline mr-2" />
-                  Confirm New Password
+                  Yangi parolni tasdiqlang
                 </label>
                 <div className="relative">
                   <input
                     {...registerPassword('confirmPassword', { required: 'Please confirm your new password' })}
                     type={showConfirmPassword ? 'text' : 'password'}
                     className="form-input pr-12"
-                    placeholder="Confirm your new password"
+                    placeholder="Yangi parolni tasdiqlang"
                   />
                   <button
                     type="button"
@@ -270,11 +268,11 @@ const Profile: React.FC = () => {
               </div>
 
               <div className="bg-blue-50 rounded-lg p-4">
-                <h4 className="text-sm font-medium text-blue-800 mb-2">Password Requirements:</h4>
+                <h4 className="text-sm font-medium text-blue-800 mb-2">Parol uchun talablar:</h4>
                 <ul className="text-sm text-blue-700 space-y-1">
-                  <li>• At least 6 characters long</li>
-                  <li>• Should contain both letters and numbers</li>
-                  <li>• Avoid using common passwords</li>
+                  <li>• Kamida 6 ta belgidan iborat bo'lishi kerak</li>
+                  <li>• Harflar va raqamlar bo'lishi kerak</li>
+                  <li>• Oddiy parollardan foydalanmang</li>
                 </ul>
               </div>
 
@@ -289,7 +287,7 @@ const Profile: React.FC = () => {
                   ) : (
                     <Lock className="w-4 h-4" />
                   )}
-                  Change Password
+                  Parolni o'zgartirish
                 </button>
               </div>
             </form>

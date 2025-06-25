@@ -71,7 +71,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {/* Page Info */}
             <div className="text-sm text-gray-600">
-                Showing {startItem} to {endItem} of {totalItems} results
+                Ko‘rsatilmoqda: {startItem} dan {endItem} gacha, jami {totalItems} ta natija
             </div>
 
             {/* Pagination Controls */}
@@ -79,7 +79,7 @@ const Pagination: React.FC<PaginationProps> = ({
                 {/* Page Size Selector */}
                 {showPageSizeSelector && (
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Show:</span>
+                        <span className="text-sm text-gray-600">Ko‘rsatish:</span>
                         <select
                             value={pageSize}
                             onChange={(e) => onPageSizeChange(parseInt(e.target.value))}
@@ -91,7 +91,7 @@ const Pagination: React.FC<PaginationProps> = ({
                                 </option>
                             ))}
                         </select>
-                        <span className="text-sm text-gray-600">per page</span>
+                        <span className="text-sm text-gray-600">sahifada</span>
                     </div>
                 )}
 
@@ -102,7 +102,7 @@ const Pagination: React.FC<PaginationProps> = ({
                         onClick={() => onPageChange(1)}
                         disabled={currentPage === 1}
                         className="p-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-                        title="First page"
+                        title="Birinchi sahifa"
                     >
                         <ChevronsLeft className="w-4 h-4" />
                     </button>
@@ -112,7 +112,7 @@ const Pagination: React.FC<PaginationProps> = ({
                         onClick={() => onPageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                         className="p-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-                        title="Previous page"
+                        title="Oldingi sahifa"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
@@ -127,8 +127,8 @@ const Pagination: React.FC<PaginationProps> = ({
                                     <button
                                         onClick={() => onPageChange(page as number)}
                                         className={`px-3 py-2 border rounded-lg transition-colors ${currentPage === page
-                                                ? 'bg-blue-600 text-white border-blue-600'
-                                                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                                            ? 'bg-blue-600 text-white border-blue-600'
+                                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                                             }`}
                                     >
                                         {page}
@@ -143,7 +143,7 @@ const Pagination: React.FC<PaginationProps> = ({
                         onClick={() => onPageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
                         className="p-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-                        title="Next page"
+                        title="Keyingi sahifa"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </button>
@@ -153,7 +153,7 @@ const Pagination: React.FC<PaginationProps> = ({
                         onClick={() => onPageChange(totalPages)}
                         disabled={currentPage === totalPages}
                         className="p-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-                        title="Last page"
+                        title="Oxirgi sahifa"
                     >
                         <ChevronsRight className="w-4 h-4" />
                     </button>
@@ -162,12 +162,12 @@ const Pagination: React.FC<PaginationProps> = ({
                 {/* Quick Jumper */}
                 {showQuickJumper && (
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Go to:</span>
+                        <span className="text-sm text-gray-600">O‘tish:</span>
                         <input
                             type="number"
                             min={1}
                             max={totalPages}
-                            placeholder="Page"
+                            placeholder="Sahifa"
                             onKeyDown={handleQuickJump}
                             className="w-16 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />

@@ -141,7 +141,7 @@ const Results: React.FC = () => {
   const formatDate = (date: Date) => {
     const months = [
       'yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun',
-      'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'
+      'iyul', 'avgust', 'sentabr', 'oktyabr', 'noyabr', 'dekabr'
     ];
     const weekdays = [
       'Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba',
@@ -190,9 +190,9 @@ const Results: React.FC = () => {
     try {
       await sendTelegramResult(message);
       setTelegramSent(true);
-      toast.success('Detailed result sent to Telegram!');
+      toast.success('Batafsil natija Telegramga yuborildi!');
     } catch (e) {
-      toast.error('Failed to send result to Telegram.');
+      toast.error('Natijani Telegramga yuborishda xatolik!');
     }
   }
 
@@ -207,12 +207,12 @@ const Results: React.FC = () => {
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
               <ArrowLeft className="w-5 h-5" />
-              Back to Results
+              Natijalarga qaytish
             </button>
             <div className="h-6 w-px bg-gray-300" />
             <div className="flex items-center gap-2">
               <Award className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-gray-900">Quiz Results</span>
+              <span className="font-medium text-gray-900">Test natijalari</span>
             </div>
           </div>
         </div>
@@ -223,8 +223,8 @@ const Results: React.FC = () => {
         {/* Score Card */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Quiz Completed!</h1>
-            <p className="text-gray-600">Here are your results</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Test yakunlandi!</h1>
+            <p className="text-gray-600">Natijalaringiz quyida</p>
           </div>
           {renderScoreCard(percentage, correctAnswers, totalQuestions, incorrectAnswers)}
         </div>
@@ -232,22 +232,22 @@ const Results: React.FC = () => {
         {/* Quiz Information Card */}
         {quizData && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Quiz Information</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Test haqida ma'lumot</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-600">Quiz Title</p>
+                <p className="text-sm text-gray-600">Test nomi</p>
                 <p className="font-medium text-gray-900">{quizData.title}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Duration</p>
-                <p className="font-medium text-gray-900">{quizData.duration} minutes</p>
+                <p className="text-sm text-gray-600">Davomiyligi</p>
+                <p className="font-medium text-gray-900">{quizData.duration} daqiqa</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Difficulty</p>
-                <p className="font-medium text-gray-900">{quizData.difficulty || 'Not specified'}</p>
+                <p className="text-sm text-gray-600">Qiyinlik darajasi</p>
+                <p className="font-medium text-gray-900">{quizData.difficulty || 'Ko\'rsatilmagan'}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Status</p>
+                <p className="text-sm text-gray-600">Holati</p>
                 <p className="font-medium text-gray-900">{quizData.status}</p>
               </div>
             </div>
@@ -256,7 +256,7 @@ const Results: React.FC = () => {
 
         {/* Detailed Results */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Question Details</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Savollar tafsiloti</h2>
           {renderQuestionDetails(result)}
         </div>
 
@@ -266,13 +266,13 @@ const Results: React.FC = () => {
             onClick={() => navigate('/quizzes')}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            Take Another Quiz
+            Yana test ishlash
           </button>
           <button
             onClick={() => navigate('/results')}
             className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
           >
-            View All Results
+            Barcha natijalarni ko'rish
           </button>
           <button
             onClick={() => handleSendTelegram()}
@@ -280,7 +280,7 @@ const Results: React.FC = () => {
             disabled={telegramSent}
           >
             <Send className="w-4 h-4" />
-            {telegramSent ? 'Sent!' : 'Send Detailed Report'}
+            {telegramSent ? 'Yuborildi!' : 'Batafsil hisobotni yuborish'}
           </button>
         </div>
       </div>

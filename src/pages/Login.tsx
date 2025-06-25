@@ -42,7 +42,7 @@ const Login: React.FC = () => {
             <BookOpen className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">Sign in to your Quiz LMS account</p>
+          <p className="text-gray-600">Quiz tizimiga kirish</p>
         </div>
 
         {/* Login Form */}
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
 
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number
+                Telefon raqami
               </label>
               <input
                 id="phone"
@@ -64,14 +64,14 @@ const Login: React.FC = () => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                placeholder="Enter your phone number"
+                placeholder="Telefon raqamingizni kiriting"
                 required
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Parol
               </label>
               <div className="relative">
                 <input
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  placeholder="Enter your password"
+                  placeholder="Parolingizni kiriting"
                   required
                 />
                 <button
@@ -99,13 +99,13 @@ const Login: React.FC = () => {
                   type="checkbox"
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <span className="ml-2 text-sm text-gray-600">Remember me</span>
+                <span className="ml-2 text-sm text-gray-600">Eslab qolish</span>
               </label>
               <Link
                 to="/"
                 className="text-sm text-blue-600 hover:text-blue-700 font-medium"
               >
-                Forgot password?
+                Parolni unutdingizmi?
               </Link>
             </div>
 
@@ -120,7 +120,7 @@ const Login: React.FC = () => {
                   Signing in...
                 </>
               ) : (
-                'Sign In'
+                'Kirish'
               )}
             </button>
           </form>

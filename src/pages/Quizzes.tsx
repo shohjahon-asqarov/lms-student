@@ -56,7 +56,7 @@ const Quizzes: React.FC = () => {
   if (error) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-700">Error loading quizzes</p>
+        <p className="text-red-700">Testlarni yuklashda xatolik</p>
       </div>
     );
   }
@@ -66,12 +66,12 @@ const Quizzes: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Available Quizzes</h1>
-          <p className="text-gray-600">Take quizzes to test your knowledge</p>
+          <h1 className="text-2xl font-bold text-gray-900">Mavjud testlar</h1>
+          <p className="text-gray-600">Testlar orqali bilimlaringizni sinab ko‘ring</p>
         </div>
         {quizzesData && (
           <div className="text-sm text-gray-600">
-            Total: {quizzesData.meta.total} quizzes
+            Jami: {quizzesData.meta.total} ta test
           </div>
         )}
       </div>
@@ -84,7 +84,7 @@ const Quizzes: React.FC = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search quizzes..."
+                placeholder="Testlarni qidiring..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -97,13 +97,13 @@ const Quizzes: React.FC = () => {
               onChange={(e) => setFilterStatus(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="all">All Status</option>
-              <option value="PENDING">Pending</option>
-              <option value="FINISHED">Finished</option>
+              <option value="all">Barchasi</option>
+              <option value="PENDING">Kutilmoqda</option>
+              <option value="FINISHED">Yakunlangan</option>
             </select>
             <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
               <Filter className="w-4 h-4" />
-              Filter
+              Filtr
             </button>
           </div>
         </div>
@@ -128,21 +128,21 @@ const Quizzes: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <FileText className="w-4 h-4" />
-                {quiz.totalQuestions} questions
+                {quiz.totalQuestions} ta savol
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Clock className="w-4 h-4" />
-                {quiz.duration} minutes
+                {quiz.duration} daqiqa
               </div>
             </div>
 
             {/* Tags */}
             <div className="flex items-center gap-2 mb-4">
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(quiz.difficulty)}`}>
-                {quiz.difficulty}
+                {quiz.difficulty === 'easy' ? 'Oson' : quiz.difficulty === 'medium' ? 'O‘rtacha' : quiz.difficulty === 'hard' ? 'Qiyin' : quiz.difficulty}
               </span>
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${quiz.status === 'FINISHED' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                {quiz.status === 'FINISHED' ? 'Finished' : 'Pending'}
+                {quiz.status === 'FINISHED' ? 'Yakunlangan' : 'Kutilmoqda'}
               </span>
             </div>
 
@@ -157,7 +157,7 @@ const Quizzes: React.FC = () => {
                 })}
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Start
+                Boshlash
               </button>
             </div>
           </div>
@@ -168,9 +168,9 @@ const Quizzes: React.FC = () => {
       {quizzesData?.data.length === 0 && (
         <div className="text-center py-12">
           <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No quizzes available</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Testlar mavjud emas</h3>
           <p className="text-gray-500 mb-4">
-            {searchTerm ? 'Try adjusting your search terms.' : 'No quizzes are currently available for you to take.'}
+            {searchTerm ? 'Qidiruv so‘zlarini o‘zgartirib ko‘ring.' : 'Hozircha siz uchun testlar mavjud emas.'}
           </p>
         </div>
       )}

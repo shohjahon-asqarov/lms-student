@@ -61,10 +61,10 @@ const Dashboard: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">
-              Welcome back, {user?.firstName}! 👋
+              Xush kelibsiz, {user?.firstName}! f44b
             </h1>
             <p className="text-blue-100 text-lg">
-              Ready to continue your learning journey?
+              O‘qishni davom ettirishga tayyormisiz?
             </p>
           </div>
           <div className="hidden md:block">
@@ -80,7 +80,7 @@ const Dashboard: React.FC = () => {
         <div className="dashboard-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Quizzes Taken</p>
+              <p className="text-sm font-medium text-gray-600">Ishlangan testlar</p>
               <p className="text-2xl font-bold text-gray-900">{studentStats.totalQuizzesTaken}</p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -89,14 +89,14 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="mt-4 flex items-center text-sm text-green-600">
             <TrendingUp className="w-4 h-4 mr-1" />
-            <span>+12% from last month</span>
+            <span>O‘tgan oydan +12%</span>
           </div>
         </div>
 
         <div className="dashboard-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Average Score</p>
+              <p className="text-sm font-medium text-gray-600">O‘rtacha ball</p>
               <p className="text-2xl font-bold text-gray-900">{studentStats.averageScore}%</p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -105,29 +105,29 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="mt-4 flex items-center text-sm text-green-600">
             <TrendingUp className="w-4 h-4 mr-1" />
-            <span>+5% improvement</span>
+            <span>+5% yaxshilanish</span>
           </div>
         </div>
 
         <div className="dashboard-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Time Spent</p>
-              <p className="text-2xl font-bold text-gray-900">{studentStats.totalTimeSpent}m</p>
+              <p className="text-sm font-medium text-gray-600">Sarflangan vaqt</p>
+              <p className="text-2xl font-bold text-gray-900">{studentStats.totalTimeSpent} daqiqa</p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
               <Clock className="w-6 h-6 text-purple-600" />
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm text-blue-600">
-            <span>This month</span>
+            <span>Bu oy</span>
           </div>
         </div>
 
         <div className="dashboard-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Completed</p>
+              <p className="text-sm font-medium text-gray-600">Yakunlangan</p>
               <p className="text-2xl font-bold text-gray-900">{studentStats.quizzesCompleted}</p>
             </div>
             <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -135,7 +135,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm text-orange-600">
-            <span>Quizzes finished</span>
+            <span>Yakunlangan testlar</span>
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Performance Trend */}
         <div className="dashboard-card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Trend</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Natijalar dinamikasi</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={performanceData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -158,7 +158,7 @@ const Dashboard: React.FC = () => {
 
         {/* Score Distribution */}
         <div className="dashboard-card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Score Distribution</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Natijalar taqsimoti</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -186,12 +186,12 @@ const Dashboard: React.FC = () => {
         {/* Recent Results */}
         <div className="dashboard-card">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Results</h3>
+            <h3 className="text-lg font-semibold text-gray-900">So‘nggi natijalar</h3>
             <Link
               to="/results"
               className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
             >
-              View all <ArrowRight className="w-4 h-4" />
+              Barchasini ko‘rish <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           <div className="space-y-3">
@@ -203,7 +203,7 @@ const Dashboard: React.FC = () => {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{result.quiz.title}</p>
-                    <p className="text-sm text-gray-500">{result.percentage}% score</p>
+                    <p className="text-sm text-gray-500">{result.percentage}% natija</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -213,7 +213,7 @@ const Dashboard: React.FC = () => {
                       ? 'bg-yellow-100 text-yellow-700'
                       : 'bg-red-100 text-red-700'
                     }`}>
-                    {result.percentage >= 70 ? 'Good' : result.percentage >= 50 ? 'Average' : 'Needs Improvement'}
+                    {result.percentage >= 70 ? 'Yaxshi' : result.percentage >= 50 ? 'O‘rtacha' : 'Yaxshilash kerak'}
                   </span>
                 </div>
               </div>
@@ -223,7 +223,7 @@ const Dashboard: React.FC = () => {
 
         {/* Quick Actions */}
         <div className="dashboard-card">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Tezkor amallar</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
               to="/quizzes"
@@ -233,8 +233,8 @@ const Dashboard: React.FC = () => {
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Take Quiz</p>
-                <p className="text-sm text-gray-500">Start a new quiz</p>
+                <p className="font-medium text-gray-900">Test ishlash</p>
+                <p className="text-sm text-gray-500">Yangi testni boshlash</p>
               </div>
             </Link>
 
@@ -246,8 +246,8 @@ const Dashboard: React.FC = () => {
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">View Results</p>
-                <p className="text-sm text-gray-500">Check your progress</p>
+                <p className="font-medium text-gray-900">Natijalarni ko‘rish</p>
+                <p className="text-sm text-gray-500">O‘z natijalaringizni tekshiring</p>
               </div>
             </Link>
 
@@ -259,8 +259,8 @@ const Dashboard: React.FC = () => {
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Profile</p>
-                <p className="text-sm text-gray-500">Update your info</p>
+                <p className="font-medium text-gray-900">Profil</p>
+                <p className="text-sm text-gray-500">Ma’lumotlarni yangilash</p>
               </div>
             </Link>
 
@@ -272,8 +272,8 @@ const Dashboard: React.FC = () => {
                 <Award className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Settings</p>
-                <p className="text-sm text-gray-500">Customize preferences</p>
+                <p className="font-medium text-gray-900">Sozlamalar</p>
+                <p className="text-sm text-gray-500">Sozlamalarni moslash</p>
               </div>
             </Link>
           </div>

@@ -29,9 +29,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
             <div className="hidden lg:block">
               <h2 className="text-xl font-semibold text-gray-900">
-                Welcome back, {user?.firstName || 'User'}!
+                Xush kelibsiz, {user?.firstName || 'Foydalanuvchi'}!
               </h2>
-              <p className="text-sm text-gray-500">Here's what's happening with your quizzes today.</p>
+              <p className="text-sm text-gray-500">Bugun testlaringizda nimalar bo'layapti?</p>
             </div>
           </div>
 
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               <Search className="w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search quizzes..."
+                placeholder="Testlarni qidiring..."
                 className="bg-transparent border-none outline-none text-sm text-gray-600 placeholder-gray-400 w-48"
               />
             </div>
@@ -67,9 +67,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               </div>
               <div className="hidden md:block">
                 <p className="text-sm font-medium text-gray-900">
-                  {user?.firstName || 'User'} {user?.lastName || ''}
+                  {user?.firstName || 'Foydalanuvchi'} {user?.lastName || ''}
                 </p>
-                <p className="text-xs text-gray-500 capitalize">{user?.role?.toLowerCase()}</p>
+                <p className="text-xs text-gray-500 capitalize">{user?.role?.toLowerCase() === 'student' ? 'talaba' : user?.role?.toLowerCase()}</p>
               </div>
             </div>
           </div>
