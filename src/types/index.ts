@@ -18,7 +18,7 @@ export interface Quiz {
   duration: number; // in minutes
   teacherId: string;
   questionCount: number;
-  status: "PENDING" | "ACTIVE" | "COMPLETED";
+  status: "PENDING" | "FINISHED";
   createdAt: string;
   updatedAt: string;
   // Computed properties for compatibility

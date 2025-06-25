@@ -153,7 +153,7 @@ const TakeQuiz: React.FC = () => {
             const result = await finishQuizMutation.mutateAsync(submission);
 
             // Pass both result and quiz data to Results page
-            navigate(`/results`, {
+            navigate(`/result`, {
                 state: {
                     result,
                     quizId: id,

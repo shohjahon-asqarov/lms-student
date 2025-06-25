@@ -98,8 +98,8 @@ const Quizzes: React.FC = () => {
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="PENDING">Pending</option>
+              <option value="FINISHED">Finished</option>
             </select>
             <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
               <Filter className="w-4 h-4" />
@@ -141,11 +141,8 @@ const Quizzes: React.FC = () => {
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(quiz.difficulty)}`}>
                 {quiz.difficulty}
               </span>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${quiz.isActive
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-500'
-                }`}>
-                {quiz.isActive ? 'Active' : 'Inactive'}
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${quiz.status === 'FINISHED' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                {quiz.status === 'FINISHED' ? 'Finished' : 'Pending'}
               </span>
             </div>
 

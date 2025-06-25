@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useQuiz } from '../hooks/useQueries';
 import {
   CheckCircle,
   XCircle,
-  Clock,
   Award,
   ArrowLeft,
   BarChart3,
-  Calendar,
   Send
 } from 'lucide-react';
 import { QuizFinishResponse } from '../types';
@@ -118,18 +115,18 @@ const Results: React.FC = () => {
   const result: QuizFinishResponse = location.state?.result;
   const quizData = location.state?.quizData;
 
-  if (!result) {
+  if (!result || !quizData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Result Not Found</h2>
-          <p className="text-gray-600 mb-4">The quiz result you're looking for doesn't exist.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Natija topilmadi</h2>
+          <p className="text-gray-600 mb-4">Test natijasi mavjud emas yoki noto'g'ri sahifaga o'tdingiz.</p>
           <button
-            onClick={() => navigate('/results')}
+            onClick={() => navigate('/quizzes')}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
           >
-            Go Back to Results
+            Testlar ro'yxatiga qaytish
           </button>
         </div>
       </div>

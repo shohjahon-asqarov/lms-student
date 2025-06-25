@@ -8,9 +8,11 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Quizzes from './pages/Quizzes';
 import Results from './pages/Results';
+import AllResults from './pages/AllResults';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import TakeQuiz from './pages/TakeQuiz';
+import MyQuizResult from './pages/MyQuizResult';
 import { queryConfig } from './config/env';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -61,6 +63,11 @@ function App() {
                 } />
                 <Route path="results" element={
                   <ProtectedRoute requiredRoles={['STUDENT']}>
+                    <AllResults />
+                  </ProtectedRoute>
+                } />
+                <Route path="result" element={
+                  <ProtectedRoute requiredRoles={['STUDENT']}>
                     <Results />
                   </ProtectedRoute>
                 } />
@@ -77,6 +84,11 @@ function App() {
                 <Route path="settings" element={
                   <ProtectedRoute requiredRoles={['STUDENT']}>
                     <Settings />
+                  </ProtectedRoute>
+                } />
+                <Route path="my-quiz-result/:quizId" element={
+                  <ProtectedRoute requiredRoles={['STUDENT']}>
+                    <MyQuizResult />
                   </ProtectedRoute>
                 } />
               </Route>

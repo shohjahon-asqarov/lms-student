@@ -120,7 +120,6 @@ class ApiService {
       data: response.data.data.map((quiz: Quiz) => ({
         ...quiz,
         description: `Quiz with ${quiz.questionCount} questions`,
-        isActive: quiz.status === "ACTIVE",
         totalQuestions: quiz.questionCount,
         createdBy: quiz.teacherId,
         difficulty: "medium" as const,
@@ -137,7 +136,6 @@ class ApiService {
     return {
       ...response.data,
       description: `Quiz with ${response.data.questionCount} questions`,
-      isActive: response.data.status === "ACTIVE",
       totalQuestions: response.data.questionCount,
       createdBy: response.data.teacherId,
       difficulty: "medium" as const,
@@ -269,6 +267,18 @@ class ApiService {
     const updatedSettings = { ...currentSettings, ...settings };
 
     return updatedSettings;
+  }
+
+  async getMyQuizResult(
+    quizId: string,
+    page = 1,
+    pageSize = 10,
+    sortBy: "ASC" | "DESC" = "ASC"
+  ): Promise<any> {
+    const response = await this.api.get(
+      `/quiz/my-quiz-result?page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&quizId=${quizId}`
+    );
+    return response.data;
   }
 }
 

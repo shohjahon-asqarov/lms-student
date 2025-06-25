@@ -222,3 +222,17 @@ export const useUpdateUserSettings = () => {
     },
   });
 };
+
+export const useMyQuizResult = (
+  quizId: string,
+  page = 1,
+  pageSize = paginationConfig.defaultPageSize,
+  sortBy: "ASC" | "DESC" = "ASC"
+) => {
+  return useQuery({
+    queryKey: ["my-quiz-result", quizId, page, pageSize, sortBy],
+    queryFn: () => apiService.getMyQuizResult(quizId, page, pageSize, sortBy),
+    enabled: !!quizId,
+    staleTime: 5 * 60 * 1000,
+  });
+};
