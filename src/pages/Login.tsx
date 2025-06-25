@@ -19,13 +19,52 @@ const Login: React.FC = () => {
     return <Navigate to={from} replace />;
   }
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    // If input is empty or prefix is missing, restore prefix
+    if (!value.startsWith('+998 ')) {
+      value = '+998 ' + value.replace(/^[^0-9]*/, '').replace(/\+?998 ?/, '');
+    }
+    // Remove all non-digit except prefix for formatting
+    let digits = value.replace(/[^0-9]/g, '');
+    if (digits.startsWith('998')) digits = digits.slice(3);
+    digits = digits.slice(0, 9);
+    // Only format if user is typing (not deleting)
+    if (e.nativeEvent instanceof InputEvent && e.nativeEvent.inputType === 'deleteContentBackward') {
+      // Let user delete any character naturally
+      setPhone(value);
+      return;
+    }
+    let formatted = '+998 ';
+    if (digits.length > 0) {
+      formatted += '(' + digits.slice(0, 2);
+    }
+    if (digits.length >= 2) {
+      formatted += ') ' + digits.slice(2, 5);
+    }
+    if (digits.length >= 5) {
+      formatted += '-' + digits.slice(5, 7);
+    }
+    if (digits.length >= 7) {
+      formatted += '-' + digits.slice(7, 9);
+    }
+    setPhone(formatted.trim());
+  };
+
+  const getRawPhone = (formatted: string) => {
+    // Extract only digits after +998
+    let digits = formatted.replace(/[^0-9]/g, '');
+    if (digits.startsWith('998')) digits = digits.slice(3);
+    return '+998' + digits;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
 
     try {
-      await login({ phone, password });
+      await login({ phone: getRawPhone(phone), password });
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
@@ -62,10 +101,11 @@ const Login: React.FC = () => {
                 id="phone"
                 type="tel"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handlePhoneChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                placeholder="Telefon raqamingizni kiriting"
+                placeholder="+998 (99) 123-45-67"
                 required
+                maxLength={19}
               />
             </div>
 
