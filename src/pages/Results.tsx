@@ -17,7 +17,8 @@ import {
   TrendingUp,
   Share2,
   Download,
-  RefreshCw
+  RefreshCw,
+  Loader2
 } from 'lucide-react';
 import { QuizFinishResponse } from '../types';
 import { sendTelegramResult } from '../utils/telegram';
@@ -49,7 +50,7 @@ function getPerformanceLabel(percentage: number) {
 
 function renderScoreCard(percentage: number, correctAnswers: number, totalQuestions: number, incorrectAnswers: number) {
   const performance = getPerformanceLabel(percentage);
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* Main Score */}
@@ -108,30 +109,27 @@ function renderQuestionDetails(result: QuizFinishResponse) {
   return (
     <div className="space-y-6">
       {result.data.map((questionResult, index) => (
-        <div key={questionResult.id} 
-             className={`card p-6 border-l-4 ${
-               questionResult.user_result 
-                 ? 'border-l-green-500 bg-gradient-to-r from-green-50/50 to-white' 
-                 : 'border-l-red-500 bg-gradient-to-r from-red-50/50 to-white'
-             }`}>
+        <div key={questionResult.id}
+          className={`card p-6 border-l-4 ${questionResult.user_result
+            ? 'border-l-green-500 bg-gradient-to-r from-green-50/50 to-white'
+            : 'border-l-red-500 bg-gradient-to-r from-red-50/50 to-white'
+            }`}>
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-white shadow-lg ${
-                questionResult.user_result 
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
-                  : 'bg-gradient-to-r from-red-500 to-pink-500'
-              }`}>
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-white shadow-lg ${questionResult.user_result
+                ? 'bg-gradient-to-r from-green-500 to-emerald-500'
+                : 'bg-gradient-to-r from-red-500 to-pink-500'
+                }`}>
                 {index + 1}
               </div>
             </div>
             <div className="flex-1">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="font-bold text-gray-900 text-lg">Savol {index + 1}</h4>
-                <span className={`px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 ${
-                  questionResult.user_result 
-                    ? 'bg-green-100 text-green-700 border border-green-200' 
-                    : 'bg-red-100 text-red-700 border border-red-200'
-                }`}>
+                <span className={`px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 ${questionResult.user_result
+                  ? 'bg-green-100 text-green-700 border border-green-200'
+                  : 'bg-red-100 text-red-700 border border-red-200'
+                  }`}>
                   {questionResult.user_result ? (
                     <>
                       <CheckCircle className="w-4 h-4" />
@@ -283,7 +281,7 @@ const Results: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <div className={`px-4 py-2 rounded-2xl font-bold ${getScoreBgColor(percentage)}`}>
               <span className={getScoreColor(percentage)}>{percentage}% {performance.emoji}</span>
@@ -374,7 +372,7 @@ const Results: React.FC = () => {
             <RefreshCw className="w-5 h-5" />
             Yana test ishlash
           </button>
-          
+
           <button
             onClick={() => navigate('/results')}
             className="flex items-center justify-center gap-3 px-6 py-4 border-2 border-gray-200 text-gray-700 
@@ -383,7 +381,7 @@ const Results: React.FC = () => {
             <BarChart3 className="w-5 h-5" />
             Barcha natijalar
           </button>
-          
+
           <button
             onClick={handleSendTelegram}
             disabled={telegramSent || isSharing}
@@ -408,7 +406,7 @@ const Results: React.FC = () => {
               </>
             )}
           </button>
-          
+
           <button
             className="flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-orange-600 to-red-600 
                      text-white rounded-2xl hover:from-orange-700 hover:to-red-700 transition-all duration-300 
@@ -431,11 +429,11 @@ const Results: React.FC = () => {
                 {percentage >= 80 ? 'Ajoyib natija!' : percentage >= 60 ? 'Yaxshi harakat!' : 'Davom eting!'}
               </h3>
               <p className="text-gray-700">
-                {percentage >= 80 
-                  ? 'Siz juda yaxshi natija ko\'rsatdingiz. Davom eting!' 
-                  : percentage >= 60 
-                  ? 'Yaxshi natija, lekin yana ham yaxshilash mumkin.' 
-                  : 'Mashq qiling va yana urinib ko\'ring. Muvaffaqiyat sizni kutmoqda!'}
+                {percentage >= 80
+                  ? 'Siz juda yaxshi natija ko\'rsatdingiz. Davom eting!'
+                  : percentage >= 60
+                    ? 'Yaxshi natija, lekin yana ham yaxshilash mumkin.'
+                    : 'Mashq qiling va yana urinib ko\'ring. Muvaffaqiyat sizni kutmoqda!'}
               </p>
             </div>
           </div>

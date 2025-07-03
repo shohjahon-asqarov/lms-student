@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { 
-  FileText, 
-  CheckCircle, 
-  XCircle, 
-  Loader2, 
-  ChevronDown, 
-  ChevronUp, 
-  Star, 
-  Award, 
-  Trophy, 
-  Repeat, 
-  ListChecks,
-  Target,
-  Brain,
-  TrendingUp,
-  Calendar,
-  Clock
+import {
+    FileText,
+    CheckCircle,
+    XCircle,
+    Loader2,
+    ChevronDown,
+    ChevronUp,
+    Star,
+    Award,
+    Trophy,
+    Repeat,
+    ListChecks,
+    Target,
+    Brain,
+    TrendingUp,
+    Calendar,
+    Clock,
+    BarChart3
 } from 'lucide-react';
 import { useMyQuizResult } from '../hooks/useQueries';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
@@ -86,7 +87,7 @@ const MyQuizResult: React.FC = () => {
         if (percent >= 90) colorClass = 'bg-yellow-500'; // gold
         else if (percent >= 70) colorClass = 'bg-blue-500'; // blue
         else if (percent >= 50) colorClass = 'bg-green-500'; // green
-        
+
         return (
             <div className="progress-bar">
                 <div
@@ -99,25 +100,25 @@ const MyQuizResult: React.FC = () => {
 
     // Motivational banner
     const getMotivation = (percentage: number) => {
-        if (percentage >= 90) return { 
-            text: 'Mukammal natija! 🏆', 
-            icon: <Star className="w-6 h-6 text-yellow-500" />, 
-            color: 'bg-gradient-to-r from-yellow-50 to-orange-50 text-yellow-800 border-yellow-200' 
+        if (percentage >= 90) return {
+            text: 'Mukammal natija! 🏆',
+            icon: <Star className="w-6 h-6 text-yellow-500" />,
+            color: 'bg-gradient-to-r from-yellow-50 to-orange-50 text-yellow-800 border-yellow-200'
         };
-        if (percentage >= 70) return { 
-            text: "A'lo! Yana ham yaxshilash mumkin! 🌟", 
-            icon: <Award className="w-6 h-6 text-blue-500" />, 
-            color: 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-800 border-blue-200' 
+        if (percentage >= 70) return {
+            text: "A'lo! Yana ham yaxshilash mumkin! 🌟",
+            icon: <Award className="w-6 h-6 text-blue-500" />,
+            color: 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-800 border-blue-200'
         };
-        if (percentage >= 50) return { 
-            text: 'Yaxshi! Yana harakat qiling! 👍', 
-            icon: <Trophy className="w-6 h-6 text-green-500" />, 
-            color: 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border-green-200' 
+        if (percentage >= 50) return {
+            text: 'Yaxshi! Yana harakat qiling! 👍',
+            icon: <Trophy className="w-6 h-6 text-green-500" />,
+            color: 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border-green-200'
         };
-        return { 
-            text: 'Boshlanishi yaxshi! Mashqni davom eting! 💪', 
-            icon: <Repeat className="w-6 h-6 text-gray-500" />, 
-            color: 'bg-gradient-to-r from-gray-50 to-slate-50 text-gray-800 border-gray-200' 
+        return {
+            text: 'Boshlanishi yaxshi! Mashqni davom eting! 💪',
+            icon: <Repeat className="w-6 h-6 text-gray-500" />,
+            color: 'bg-gradient-to-r from-gray-50 to-slate-50 text-gray-800 border-gray-200'
         };
     };
 
@@ -208,7 +209,7 @@ const MyQuizResult: React.FC = () => {
         const totalQuestions = result.questions?.length || 0;
         const percent = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
         const motivation = getMotivation(percent);
-        
+
         return (
             <div
                 key={result.id || idx}
@@ -218,7 +219,7 @@ const MyQuizResult: React.FC = () => {
                 {/* Background Pattern */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100 to-purple-100 
                               rounded-full -translate-y-16 translate-x-16 opacity-30"></div>
-                
+
                 <div className="relative z-10">
                     {/* Motivational banner */}
                     <div className={`mb-6 px-4 py-3 rounded-2xl font-bold flex items-center gap-3 text-base 
@@ -226,7 +227,7 @@ const MyQuizResult: React.FC = () => {
                         {motivation.icon}
                         {motivation.text}
                     </div>
-                    
+
                     <div
                         className="cursor-pointer select-none"
                         onClick={() => setOpenIndex(isOpen ? null : idx)}
@@ -239,16 +240,16 @@ const MyQuizResult: React.FC = () => {
                                         {label}
                                     </div>
                                 )}
-                                
+
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
                                     <Brain className="w-7 h-7 text-indigo-600" />
                                     {result.quiz?.title || "Test nomi: Ma'lumot yo'q"}
                                 </h3>
-                                
+
                                 {result.quiz?.description && (
                                     <p className="text-gray-600 mb-4 leading-relaxed">{result.quiz.description}</p>
                                 )}
-                                
+
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                                     <div className="bg-blue-50 rounded-2xl p-3 border border-blue-200">
                                         <div className="flex items-center gap-2 mb-1">
@@ -259,7 +260,7 @@ const MyQuizResult: React.FC = () => {
                                             {typeof result.percentage === 'number' ? result.percentage : '—'}%
                                         </span>
                                     </div>
-                                    
+
                                     <div className="bg-purple-50 rounded-2xl p-3 border border-purple-200">
                                         <div className="flex items-center gap-2 mb-1">
                                             <Repeat className="w-4 h-4 text-purple-600" />
@@ -269,7 +270,7 @@ const MyQuizResult: React.FC = () => {
                                             {typeof result.attempts === 'number' ? result.attempts : '—'}
                                         </span>
                                     </div>
-                                    
+
                                     <div className="bg-green-50 rounded-2xl p-3 border border-green-200">
                                         <div className="flex items-center gap-2 mb-1">
                                             <CheckCircle className="w-4 h-4 text-green-600" />
@@ -279,7 +280,7 @@ const MyQuizResult: React.FC = () => {
                                             {correctCount} / {totalQuestions}
                                         </span>
                                     </div>
-                                    
+
                                     <div className="bg-red-50 rounded-2xl p-3 border border-red-200">
                                         <div className="flex items-center gap-2 mb-1">
                                             <XCircle className="w-4 h-4 text-red-600" />
@@ -290,17 +291,17 @@ const MyQuizResult: React.FC = () => {
                                         </span>
                                     </div>
                                 </div>
-                                
+
                                 <div className="text-gray-500 text-sm mb-4 flex items-center gap-2">
                                     <Clock className="w-4 h-4" />
                                     {result.createdAt ? new Date(result.createdAt).toLocaleString() : "Sana: Ma'lumot yo'q"}
                                 </div>
-                                
+
                                 <div className="mb-4">
                                     <ProgressBar value={correctCount} max={totalQuestions || 1} />
                                 </div>
                             </div>
-                            
+
                             <button
                                 className="ml-6 w-12 h-12 flex items-center justify-center rounded-2xl border-2 border-gray-200 
                                          bg-white hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-300 
@@ -315,7 +316,7 @@ const MyQuizResult: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    
+
                     {isOpen && (
                         <div className="mt-8 animate-fade-in">
                             <h4 className="text-lg font-bold mb-6 text-indigo-700 flex items-center gap-2">
@@ -329,30 +330,27 @@ const MyQuizResult: React.FC = () => {
                                         return (
                                             <div
                                                 key={q.id || qidx}
-                                                className={`card p-6 border-l-4 transition-all duration-200 ${
-                                                    userCorrect 
-                                                        ? 'border-l-green-500 bg-gradient-to-r from-green-50/50 to-white' 
-                                                        : 'border-l-red-500 bg-gradient-to-r from-red-50/50 to-white'
-                                                }`}
+                                                className={`card p-6 border-l-4 transition-all duration-200 ${userCorrect
+                                                    ? 'border-l-green-500 bg-gradient-to-r from-green-50/50 to-white'
+                                                    : 'border-l-red-500 bg-gradient-to-r from-red-50/50 to-white'
+                                                    }`}
                                             >
                                                 <div className="flex items-center gap-3 mb-4">
                                                     <div className={`w-10 h-10 rounded-2xl font-bold text-sm flex items-center 
-                                                                   justify-center text-white shadow-lg ${
-                                                        userCorrect 
-                                                            ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
+                                                                   justify-center text-white shadow-lg ${userCorrect
+                                                            ? 'bg-gradient-to-r from-green-500 to-emerald-500'
                                                             : 'bg-gradient-to-r from-red-500 to-pink-500'
-                                                    }`}>
+                                                        }`}>
                                                         {qidx + 1}
                                                     </div>
                                                     <h5 className="text-lg font-bold text-gray-900 flex-1">
                                                         {q.text || "Savol matni yo'q"}
                                                     </h5>
                                                     <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center 
-                                                                    gap-1 border ${
-                                                        userCorrect 
-                                                            ? 'bg-green-100 text-green-700 border-green-300' 
+                                                                    gap-1 border ${userCorrect
+                                                            ? 'bg-green-100 text-green-700 border-green-300'
                                                             : 'bg-red-100 text-red-700 border-red-300'
-                                                    }`}>
+                                                        }`}>
                                                         {userCorrect ? (
                                                             <>
                                                                 <CheckCircle className="w-3 h-3" />
@@ -366,18 +364,17 @@ const MyQuizResult: React.FC = () => {
                                                         )}
                                                     </span>
                                                 </div>
-                                                
+
                                                 {Array.isArray(q.answers) && q.answers.length > 0 ? (
                                                     <div className="space-y-3">
                                                         {q.answers.map((a: any) => (
                                                             <div
                                                                 key={a.id}
                                                                 className={`flex items-center gap-3 px-4 py-3 rounded-2xl 
-                                                                          transition-colors duration-200 text-sm font-medium border-2 ${
-                                                                    a.isCorrect 
-                                                                        ? 'bg-green-50 text-green-800 border-green-200' 
+                                                                          transition-colors duration-200 text-sm font-medium border-2 ${a.isCorrect
+                                                                        ? 'bg-green-50 text-green-800 border-green-200'
                                                                         : 'bg-gray-50 text-gray-700 border-gray-200'
-                                                                }`}
+                                                                    }`}
                                                             >
                                                                 {a.isCorrect ? (
                                                                     <CheckCircle className="w-5 h-5 text-green-500" />
@@ -422,7 +419,7 @@ const MyQuizResult: React.FC = () => {
                     </h1>
                     <p className="text-gray-600 text-lg">Test natijalaringizni batafsil ko'ring va tahlil qiling</p>
                 </div>
-                
+
                 {/* STATISTIKA BLOKI */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                     {stats.map((s, i) => (
@@ -444,7 +441,7 @@ const MyQuizResult: React.FC = () => {
                         </div>
                     ))}
                 </div>
-                
+
                 {/* CHARTLAR BLOKI */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Donut chart */}
@@ -517,7 +514,7 @@ const MyQuizResult: React.FC = () => {
                             </div>
                         )}
                     </div>
-                    
+
                     {/* Grouped Bar chart */}
                     <div className="card p-8 bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200">
                         <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
@@ -552,11 +549,11 @@ const MyQuizResult: React.FC = () => {
                         )}
                     </div>
                 </div>
-                
+
                 {/* NATIJALAR */}
                 <div className="space-y-8">
                     {mainResult && renderResultCard(mainResult, 0, 'Asosiy natija')}
-                    
+
                     {attemptResults.length > 0 && (
                         <div className="space-y-8">
                             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">

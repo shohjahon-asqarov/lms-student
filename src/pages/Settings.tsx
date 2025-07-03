@@ -102,24 +102,24 @@ const Settings: React.FC = () => {
   ];
 
   const themes = [
-    { 
-      value: 'light', 
-      label: 'Yorug\'', 
-      icon: Sun, 
+    {
+      value: 'light',
+      label: 'Yorug\'',
+      icon: Sun,
       description: 'Yorug\' muhit uchun',
       preview: 'bg-white border-gray-200'
     },
-    { 
-      value: 'dark', 
-      label: 'Qorong\'u', 
-      icon: Moon, 
+    {
+      value: 'dark',
+      label: 'Qorong\'u',
+      icon: Moon,
       description: 'Qorong\'u muhit uchun',
       preview: 'bg-gray-900 border-gray-700'
     },
-    { 
-      value: 'auto', 
-      label: 'Avtomatik', 
-      icon: Monitor, 
+    {
+      value: 'auto',
+      label: 'Avtomatik',
+      icon: Monitor,
       description: 'Tizim sozlamasiga mos',
       preview: 'bg-gradient-to-r from-white to-gray-900 border-gray-400'
     }
@@ -158,11 +158,10 @@ const Settings: React.FC = () => {
                     <button
                       key={section.id}
                       onClick={() => setActiveSection(section.id)}
-                      className={`w-full flex items-center gap-3 p-4 rounded-2xl transition-all duration-200 text-left ${
-                        activeSection === section.id
+                      className={`w-full flex items-center gap-3 p-4 rounded-2xl transition-all duration-200 text-left ${activeSection === section.id
                           ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
                           : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       <Icon className="w-5 h-5" />
                       <div>
@@ -206,9 +205,8 @@ const Settings: React.FC = () => {
                           <button
                             key={theme.value}
                             onClick={() => handleThemeChange(theme.value as 'light' | 'dark')}
-                            className={`card p-6 text-center transition-all duration-300 hover:scale-105 ${
-                              isSelected ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''
-                            }`}
+                            className={`card p-6 text-center transition-all duration-300 hover:scale-105 ${isSelected ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''
+                              }`}
                           >
                             <div className={`w-16 h-16 ${theme.preview} rounded-2xl mx-auto mb-4 border-2 
                                           flex items-center justify-center shadow-lg`}>
@@ -231,7 +229,7 @@ const Settings: React.FC = () => {
                       <div>
                         <h4 className="font-semibold text-blue-900 mb-2">Ko'rinish haqida</h4>
                         <p className="text-sm text-blue-700">
-                          Mavzu tanlash orqali ilovani o'z didingizga moslashtirishingiz mumkin. 
+                          Mavzu tanlash orqali ilovani o'z didingizga moslashtirishingiz mumkin.
                           Qorong'u mavzu ko'zlaringizni himoya qiladi va batareya quvvatini tejaydi.
                         </p>
                       </div>
@@ -266,9 +264,8 @@ const Settings: React.FC = () => {
                           <button
                             key={language.value}
                             onClick={() => handleLanguageChange(language.value as 'en' | 'uz' | 'ru')}
-                            className={`card p-6 text-center transition-all duration-300 hover:scale-105 ${
-                              isSelected ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''
-                            }`}
+                            className={`card p-6 text-center transition-all duration-300 hover:scale-105 ${isSelected ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''
+                              }`}
                           >
                             <div className="text-4xl mb-4">{language.flag}</div>
                             <div className="flex items-center justify-center gap-2 mb-2">
@@ -288,7 +285,7 @@ const Settings: React.FC = () => {
                       <div>
                         <h4 className="font-semibold text-green-900 mb-2">Til haqida</h4>
                         <p className="text-sm text-green-700">
-                          Tilni o'zgartirish barcha interfeys elementlarini tanlangan tilga o'tkazadi. 
+                          Tilni o'zgartirish barcha interfeys elementlarini tanlangan tilga o'tkazadi.
                           O'zgarishlar darhol qo'llaniladi va qayta yuklash talab qilinmaydi.
                         </p>
                       </div>
@@ -398,7 +395,7 @@ const Settings: React.FC = () => {
                       <div>
                         <h4 className="font-semibold text-blue-900 mb-2">Bildirishnomalar haqida</h4>
                         <p className="text-sm text-blue-700">
-                          Bildirishnomalarni yoqish orqali yangi testlar, natijalar va muhim yangiliklar haqida 
+                          Bildirishnomalarni yoqish orqali yangi testlar, natijalar va muhim yangiliklar haqida
                           o'z vaqtida xabardor bo'lasiz. Istalgan vaqtda o'chirib qo'yishingiz mumkin.
                         </p>
                       </div>
@@ -507,7 +504,7 @@ const Settings: React.FC = () => {
                       <div>
                         <h4 className="font-semibold text-red-900 mb-2">Muhim eslatma</h4>
                         <p className="text-sm text-red-700">
-                          Akkauntni o'chirish qaytarib bo'lmaydigan amal hisoblanadi. Barcha ma'lumotlaringiz, 
+                          Akkauntni o'chirish qaytarib bo'lmaydigan amal hisoblanadi. Barcha ma'lumotlaringiz,
                           test natijalari va yutuqlaringiz butunlay yo'qoladi. Iltimos, ehtiyot bo'ling.
                         </p>
                       </div>

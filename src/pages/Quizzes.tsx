@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuizzes } from '../hooks/useQueries';
 import { useAuth } from '../hooks/useAuth';
-import Pagination from '../components/Pagination';
 import { paginationConfig } from '../config/env';
 import {
   Search,
@@ -20,6 +19,8 @@ import {
   Play,
   Award
 } from 'lucide-react';
+import { Dropdown } from 'primereact/dropdown';
+import { Paginator } from 'primereact/paginator';
 
 const Quizzes: React.FC = () => {
   const { user } = useAuth();
@@ -34,27 +35,27 @@ const Quizzes: React.FC = () => {
 
   const getDifficultyConfig = (difficulty: string | undefined) => {
     switch (difficulty) {
-      case 'easy': 
-        return { 
-          color: 'bg-green-100 text-green-700 border-green-200', 
+      case 'easy':
+        return {
+          color: 'bg-green-100 text-green-700 border-green-200',
           icon: '🟢',
           label: 'Oson'
         };
-      case 'medium': 
-        return { 
-          color: 'bg-yellow-100 text-yellow-700 border-yellow-200', 
+      case 'medium':
+        return {
+          color: 'bg-yellow-100 text-yellow-700 border-yellow-200',
           icon: '🟡',
           label: 'O\'rtacha'
         };
-      case 'hard': 
-        return { 
-          color: 'bg-red-100 text-red-700 border-red-200', 
+      case 'hard':
+        return {
+          color: 'bg-red-100 text-red-700 border-red-200',
           icon: '🔴',
           label: 'Qiyin'
         };
-      default: 
-        return { 
-          color: 'bg-gray-100 text-gray-700 border-gray-200', 
+      default:
+        return {
+          color: 'bg-gray-100 text-gray-700 border-gray-200',
           icon: '⚪',
           label: 'Noma\'lum'
         };
@@ -159,32 +160,32 @@ const Quizzes: React.FC = () => {
               />
             </div>
           </div>
-          
+
           {/* Filters */}
           <div className="flex gap-4">
-            <select
+            <Dropdown
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 
-                       focus:border-transparent bg-gray-50 focus:bg-white transition-all duration-200"
-            >
-              <option value="all">Barcha holatlar</option>
-              <option value="PENDING">Kutilmoqda</option>
-              <option value="FINISHED">Yakunlangan</option>
-            </select>
-            
-            <select
+              options={[
+                { label: 'Barcha holatlar', value: 'all' },
+                { label: 'Kutilmoqda', value: 'PENDING' },
+                { label: 'Yakunlangan', value: 'FINISHED' },
+              ]}
+              onChange={(e) => setFilterStatus(e.value)}
+              className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+              placeholder="Holatni tanlang"
+            />
+            <Dropdown
               value={filterDifficulty}
-              onChange={(e) => setFilterDifficulty(e.target.value)}
-              className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 
-                       focus:border-transparent bg-gray-50 focus:bg-white transition-all duration-200"
-            >
-              <option value="all">Barcha qiyinliklar</option>
-              <option value="easy">Oson</option>
-              <option value="medium">O'rtacha</option>
-              <option value="hard">Qiyin</option>
-            </select>
-            
+              options={[
+                { label: 'Barcha qiyinliklar', value: 'all' },
+                { label: 'Oson', value: 'easy' },
+                { label: "O'rtacha", value: 'medium' },
+                { label: 'Qiyin', value: 'hard' },
+              ]}
+              onChange={(e) => setFilterDifficulty(e.value)}
+              className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+              placeholder="Qiyinlikni tanlang"
+            />
             <button className="px-6 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 
                              flex items-center gap-2 transition-all duration-200 hover:scale-105">
               <Filter className="w-4 h-4" />
@@ -199,10 +200,10 @@ const Quizzes: React.FC = () => {
         {quizzesData?.data.map((quiz, index) => {
           const difficultyConfig = getDifficultyConfig(quiz.difficulty);
           const statusConfig = getStatusConfig(quiz.status);
-          
+
           return (
-            <div 
-              key={quiz.id} 
+            <div
+              key={quiz.id}
               className="card-interactive group relative overflow-hidden"
               style={{ animationDelay: `${index * 100}ms` }}
             >
@@ -210,7 +211,7 @@ const Quizzes: React.FC = () => {
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100 to-purple-100 
                             rounded-full -translate-y-16 translate-x-16 opacity-50 group-hover:opacity-70 
                             transition-opacity duration-300"></div>
-              
+
               <div className="relative z-10 p-6">
                 {/* Header */}
                 <div className="flex justify-between items-start mb-4">
@@ -312,11 +313,11 @@ const Quizzes: React.FC = () => {
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">Testlar mavjud emas</h3>
           <p className="text-gray-500 mb-6 max-w-md mx-auto">
-            {searchTerm 
-              ? 'Qidiruv so\'zlarini o\'zgartirib ko\'ring yoki filtrlarni qayta sozlang.' 
+            {searchTerm
+              ? 'Qidiruv so\'zlarini o\'zgartirib ko\'ring yoki filtrlarni qayta sozlang.'
               : 'Hozircha siz uchun testlar mavjud emas. Tez orada yangi testlar qo\'shiladi.'}
           </p>
-          <button 
+          <button
             onClick={() => {
               setSearchTerm('');
               setFilterStatus('all');
@@ -330,17 +331,19 @@ const Quizzes: React.FC = () => {
       )}
 
       {/* Enhanced Pagination */}
-      {quizzesData && quizzesData.meta.pageCount > 1 && (
+      {quizzesData && (
         <div className="mt-12">
-          <Pagination
-            currentPage={page}
-            totalPages={quizzesData.meta.pageCount}
-            totalItems={quizzesData.meta.total}
-            pageSize={pageSize}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            showPageSizeSelector={true}
-            showQuickJumper={true}
+          <Paginator
+            first={(page - 1) * pageSize}
+            rows={pageSize}
+            totalRecords={quizzesData.meta.total}
+            onPageChange={(e) => {
+              setPage(Math.floor(e.first / e.rows) + 1);
+              setPageSize(e.rows);
+            }}
+            rowsPerPageOptions={[...paginationConfig.pageSizeOptions]}
+            template="RowsPerPageDropdown FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
           />
         </div>
       )}

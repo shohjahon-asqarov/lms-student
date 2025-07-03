@@ -290,7 +290,7 @@ const TakeQuiz: React.FC = () => {
                                 {currentQuestionIndex + 1} / {questions.length}
                             </span>
                         </div>
-                        
+
                         {/* Timer */}
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-lg
                                        ${timeRemaining <= 120 ? 'bg-red-100 animate-pulse' : 'bg-blue-50'}`}>
@@ -315,8 +315,8 @@ const TakeQuiz: React.FC = () => {
                         </span>
                     </div>
                     <div className="progress-bar h-2">
-                        <div 
-                            className="progress-fill h-2" 
+                        <div
+                            className="progress-fill h-2"
                             style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
                         />
                     </div>
@@ -367,33 +367,29 @@ const TakeQuiz: React.FC = () => {
                                             key={answer.id}
                                             onClick={() => handleAnswerSelect(currentQuestion.id, answer.id)}
                                             className={`w-full p-6 text-left border-2 rounded-2xl transition-all duration-300 
-                                                      hover:scale-[1.02] hover:shadow-lg group ${
-                                                isSelected
+                                                      hover:scale-[1.02] hover:shadow-lg group ${isSelected
                                                     ? 'border-indigo-500 bg-gradient-to-r from-indigo-50 to-purple-50 shadow-lg'
                                                     : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
-                                            }`}
+                                                }`}
                                         >
                                             <div className="flex items-center gap-4">
                                                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center 
-                                                               font-bold text-sm transition-all duration-300 ${
-                                                    isSelected
+                                                               font-bold text-sm transition-all duration-300 ${isSelected
                                                         ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
                                                         : 'bg-gray-100 text-gray-600 group-hover:bg-indigo-100 group-hover:text-indigo-600'
-                                                }`}>
+                                                    }`}>
                                                     {letters[index]}
                                                 </div>
                                                 <div className="flex-1">
-                                                    <span className={`text-lg font-medium ${
-                                                        isSelected ? 'text-indigo-900' : 'text-gray-700'
-                                                    }`}>
+                                                    <span className={`text-lg font-medium ${isSelected ? 'text-indigo-900' : 'text-gray-700'
+                                                        }`}>
                                                         {answer.text}
                                                     </span>
                                                 </div>
-                                                <div className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${
-                                                    isSelected
+                                                <div className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${isSelected
                                                         ? 'border-indigo-500 bg-indigo-500'
                                                         : 'border-gray-300 group-hover:border-indigo-400'
-                                                }`}>
+                                                    }`}>
                                                     {isSelected && (
                                                         <CheckCircle className="w-6 h-6 text-white -m-0.5" />
                                                     )}
@@ -489,13 +485,12 @@ const TakeQuiz: React.FC = () => {
                                             key={index}
                                             onClick={() => setCurrentQuestionIndex(index)}
                                             className={`aspect-square rounded-xl text-sm font-bold transition-all duration-200 
-                                                      hover:scale-110 ${
-                                                isCurrent
+                                                      hover:scale-110 ${isCurrent
                                                     ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
                                                     : isAnswered
-                                                    ? 'bg-green-100 text-green-700 border-2 border-green-300 hover:bg-green-200'
-                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-2 border-gray-200'
-                                            }`}
+                                                        ? 'bg-green-100 text-green-700 border-2 border-green-300 hover:bg-green-200'
+                                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-2 border-gray-200'
+                                                }`}
                                         >
                                             {index + 1}
                                         </button>
@@ -540,7 +535,7 @@ const TakeQuiz: React.FC = () => {
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Testni yakunlashni tasdiqlang</h3>
                             <p className="text-gray-600 mb-6">
-                                Siz {answeredCount} ta savoldan {questions.length} tasiga javob berdingiz. 
+                                Siz {answeredCount} ta savoldan {questions.length} tasiga javob berdingiz.
                                 Testni yakunlashni xohlaysizmi?
                             </p>
                             <div className="flex gap-4">

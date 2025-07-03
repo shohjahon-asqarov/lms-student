@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuizzes } from '../hooks/useQueries';
-import Pagination from '../components/Pagination';
-import { 
-  BarChart3, 
-  Search, 
-  FileText, 
-  Clock, 
-  Filter,
-  Trophy,
-  Target,
-  Star,
-  Calendar,
-  TrendingUp,
-  Award,
-  CheckCircle,
-  Eye,
-  ArrowRight,
-  Brain,
-  Zap
+import { Paginator } from 'primereact/paginator';
+import {
+    BarChart3,
+    Search,
+    FileText,
+    Clock,
+    Filter,
+    Trophy,
+    Target,
+    Star,
+    Calendar,
+    TrendingUp,
+    Award,
+    CheckCircle,
+    Eye,
+    ArrowRight,
+    Brain,
+    Zap
 } from 'lucide-react';
 import { paginationConfig } from '../config/env';
+import { Dropdown } from 'primereact/dropdown';
 
 const AllResults: React.FC = () => {
     const navigate = useNavigate();
@@ -76,7 +77,7 @@ const AllResults: React.FC = () => {
 
     // Filter only completed quizzes
     let completedQuizzes = quizzesData?.data.filter((quiz) => quiz.status === 'FINISHED') || [];
-    
+
     if (searchTerm) {
         completedQuizzes = completedQuizzes.filter((quiz) =>
             quiz.title?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -103,27 +104,27 @@ const AllResults: React.FC = () => {
 
     const getDifficultyConfig = (difficulty: string | undefined) => {
         switch (difficulty) {
-            case 'easy': 
-                return { 
-                    color: 'bg-green-100 text-green-700 border-green-200', 
+            case 'easy':
+                return {
+                    color: 'bg-green-100 text-green-700 border-green-200',
                     icon: '🟢',
                     label: 'Oson'
                 };
-            case 'medium': 
-                return { 
-                    color: 'bg-yellow-100 text-yellow-700 border-yellow-200', 
+            case 'medium':
+                return {
+                    color: 'bg-yellow-100 text-yellow-700 border-yellow-200',
                     icon: '🟡',
                     label: 'O\'rtacha'
                 };
-            case 'hard': 
-                return { 
-                    color: 'bg-red-100 text-red-700 border-red-200', 
+            case 'hard':
+                return {
+                    color: 'bg-red-100 text-red-700 border-red-200',
                     icon: '🔴',
                     label: 'Qiyin'
                 };
-            default: 
-                return { 
-                    color: 'bg-gray-100 text-gray-700 border-gray-200', 
+            default:
+                return {
+                    color: 'bg-gray-100 text-gray-700 border-gray-200',
                     icon: '⚪',
                     label: 'Noma\'lum'
                 };
@@ -174,37 +175,22 @@ const AllResults: React.FC = () => {
                                 />
                             </div>
                         </div>
-                        
+
                         {/* Filters */}
                         <div className="flex gap-4">
-                            <select
+                            <Dropdown
                                 value={filterDifficulty}
-                                onChange={(e) => setFilterDifficulty(e.target.value)}
-                                className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 
-                                         focus:border-transparent bg-gray-50 focus:bg-white transition-all duration-200"
-                            >
-                                <option value="all">Barcha qiyinliklar</option>
-                                <option value="easy">Oson</option>
-                                <option value="medium">O'rtacha</option>
-                                <option value="hard">Qiyin</option>
-                            </select>
-                            
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                                className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 
-                                         focus:border-transparent bg-gray-50 focus:bg-white transition-all duration-200"
-                            >
-                                <option value="newest">Eng yangi</option>
-                                <option value="oldest">Eng eski</option>
-                                <option value="name">Nom bo'yicha</option>
-                            </select>
-                            
-                            <button className="px-6 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 
-                                             flex items-center gap-2 transition-all duration-200 hover:scale-105">
-                                <Filter className="w-4 h-4" />
-                                <span className="hidden sm:inline">Filtr</span>
-                            </button>
+                                options={[
+                                    { label: 'Barcha qiyinliklar', value: 'all' },
+                                    { label: 'Oson', value: 'easy' },
+                                    { label: "O'rtacha", value: 'medium' },
+                                    { label: 'Qiyin', value: 'hard' },
+                                ]}
+                                onChange={(e) => setFilterDifficulty(e.value)}
+                                className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+                                placeholder="Qiyinlikni tanlang"
+                            />
+
                         </div>
                     </div>
                 </div>
@@ -284,10 +270,10 @@ const AllResults: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {completedQuizzes.map((quiz, index) => {
                         const difficultyConfig = getDifficultyConfig(quiz.difficulty);
-                        
+
                         return (
-                            <div 
-                                key={quiz.id} 
+                            <div
+                                key={quiz.id}
                                 className="card-interactive group relative overflow-hidden bg-gradient-to-br from-white to-gray-50/50"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
@@ -295,7 +281,7 @@ const AllResults: React.FC = () => {
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-100 to-emerald-100 
                                               rounded-full -translate-y-16 translate-x-16 opacity-50 group-hover:opacity-70 
                                               transition-opacity duration-300"></div>
-                                
+
                                 <div className="relative z-10 p-6">
                                     {/* Header */}
                                     <div className="flex justify-between items-start mb-4">
@@ -331,7 +317,7 @@ const AllResults: React.FC = () => {
                                                 {quiz.totalQuestions || quiz.questionCount}
                                             </span>
                                         </div>
-                                        
+
                                         <div className="bg-purple-50 rounded-2xl p-3 border border-purple-200">
                                             <div className="flex items-center gap-2 mb-1">
                                                 <Clock className="w-4 h-4 text-purple-600" />
@@ -360,8 +346,8 @@ const AllResults: React.FC = () => {
                                             <span>85%</span>
                                         </div>
                                         <div className="progress-bar">
-                                            <div className="progress-fill bg-gradient-to-r from-green-500 to-emerald-500" 
-                                                 style={{ width: '85%' }}></div>
+                                            <div className="progress-fill bg-gradient-to-r from-green-500 to-emerald-500"
+                                                style={{ width: '85%' }}></div>
                                         </div>
                                     </div>
 
@@ -397,12 +383,12 @@ const AllResults: React.FC = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-4">Yakunlangan testlar topilmadi 🔍</h3>
                         <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg">
-                            {searchTerm 
-                                ? 'Qidiruv so\'zlarini o\'zgartirib ko\'ring yoki filtrlarni qayta sozlang.' 
+                            {searchTerm
+                                ? 'Qidiruv so\'zlarini o\'zgartirib ko\'ring yoki filtrlarni qayta sozlang.'
                                 : 'Hali yakunlangan testlar yo\'q. Testlarni ishlashni boshlang!'}
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <button 
+                            <button
                                 onClick={() => {
                                     setSearchTerm('');
                                     setFilterDifficulty('all');
@@ -412,7 +398,7 @@ const AllResults: React.FC = () => {
                             >
                                 Filtrlarni tozalash
                             </button>
-                            <button 
+                            <button
                                 onClick={() => navigate('/quizzes')}
                                 className="btn-primary"
                             >
@@ -423,17 +409,19 @@ const AllResults: React.FC = () => {
                 )}
 
                 {/* Enhanced Pagination */}
-                {quizzesData && quizzesData.meta.pageCount > 1 && (
+                {quizzesData && (
                     <div className="mt-12">
-                        <Pagination
-                            currentPage={page}
-                            totalPages={quizzesData.meta.pageCount}
-                            totalItems={quizzesData.meta.total}
-                            pageSize={pageSize}
-                            onPageChange={setPage}
-                            onPageSizeChange={setPageSize}
-                            showPageSizeSelector={true}
-                            showQuickJumper={true}
+                        <Paginator
+                            first={(page - 1) * pageSize}
+                            rows={pageSize}
+                            totalRecords={quizzesData.meta.total}
+                            onPageChange={(e) => {
+                                setPage(Math.floor(e.first / e.rows) + 1);
+                                setPageSize(e.rows);
+                            }}
+                            rowsPerPageOptions={[...paginationConfig.pageSizeOptions]}
+                            template="RowsPerPageDropdown FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                            className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
                         />
                     </div>
                 )}

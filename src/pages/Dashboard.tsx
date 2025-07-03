@@ -3,23 +3,6 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useUserResults } from '../hooks/useQueries';
 import {
-  Target,
-  Award,
-  Clock,
-  FileText,
-  TrendingUp,
-  ArrowRight,
-  BookOpen,
-  BarChart3,
-  Zap,
-  Star,
-  Trophy,
-  Calendar,
-  Users,
-  Brain,
-  Flame
-} from 'lucide-react';
-import {
   BarChart,
   Bar,
   XAxis,
@@ -27,14 +10,23 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
   Area,
   AreaChart
 } from 'recharts';
+import {
+  Trophy,
+  Calendar,
+  Brain,
+  Flame,
+  BookOpen,
+  FileText,
+  TrendingUp,
+  Award,
+  Clock,
+  Target,
+  ArrowRight,
+  BarChart3
+} from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -72,12 +64,6 @@ const Dashboard: React.FC = () => {
     { day: 'Ya', tests: 1, time: 35 }
   ];
 
-  const scoreDistribution = [
-    { range: '90-100%', count: 2, color: '#10B981' },
-    { range: '70-89%', count: 5, color: '#3B82F6' },
-    { range: '50-69%', count: 3, color: '#F59E0B' },
-    { range: 'Below 50%', count: 2, color: '#EF4444' }
-  ];
 
   const achievements = [
     { id: 1, title: 'First Quiz', icon: '🎯', unlocked: true },
@@ -94,7 +80,7 @@ const Dashboard: React.FC = () => {
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
-        
+
         <div className="relative z-10 flex items-center justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-4">
@@ -110,7 +96,7 @@ const Dashboard: React.FC = () => {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-6 mt-6">
               <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2">
                 <Flame className="w-5 h-5 text-orange-300" />
@@ -122,7 +108,7 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="hidden lg:block">
             <div className="w-32 h-32 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center float">
               <Brain className="w-16 h-16 text-white" />
@@ -217,28 +203,28 @@ const Dashboard: React.FC = () => {
             <AreaChart data={performanceData}>
               <defs>
                 <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
               <YAxis stroke="#64748b" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: 'none', 
-                  borderRadius: '12px', 
-                  boxShadow: '0 10px 25px rgba(0,0,0,0.1)' 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                 }}
               />
-              <Area 
-                type="monotone" 
-                dataKey="score" 
-                stroke="#6366f1" 
+              <Area
+                type="monotone"
+                dataKey="score"
+                stroke="#6366f1"
                 strokeWidth={3}
-                fillOpacity={1} 
-                fill="url(#colorScore)" 
+                fillOpacity={1}
+                fill="url(#colorScore)"
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -258,12 +244,12 @@ const Dashboard: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="day" stroke="#64748b" fontSize={12} />
               <YAxis stroke="#64748b" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: 'none', 
-                  borderRadius: '12px', 
-                  boxShadow: '0 10px 25px rgba(0,0,0,0.1)' 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                 }}
               />
               <Bar dataKey="tests" fill="#8b5cf6" radius={[8, 8, 0, 0]} />
@@ -288,28 +274,27 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="space-y-4">
             {resultsData?.data.slice(0, 4).map((result, index) => (
-              <div key={result.id} 
-                   className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl 
+              <div key={result.id}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl 
                             hover:bg-gray-100 transition-all duration-200 hover:scale-[1.02]"
-                   style={{ animationDelay: `${index * 100}ms` }}>
+                style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl 
                                 flex items-center justify-center shadow-lg">
                     <BarChart3 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">{result.quiz.title}</p>
+                    <p className="font-semibold text-gray-900">{result.quiz?.title || "No title"}</p>
                     <p className="text-sm text-gray-500">{result.percentage}% natija</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    result.percentage >= 70
-                      ? 'bg-green-100 text-green-700'
-                      : result.percentage >= 50
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${result.percentage >= 70
+                    ? 'bg-green-100 text-green-700'
+                    : result.percentage >= 50
                       ? 'bg-yellow-100 text-yellow-700'
                       : 'bg-red-100 text-red-700'
-                  }`}>
+                    }`}>
                     {result.percentage >= 70 ? 'A\'lo' : result.percentage >= 50 ? 'Yaxshi' : 'Yaxshilash kerak'}
                   </span>
                 </div>
@@ -328,12 +313,11 @@ const Dashboard: React.FC = () => {
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {achievements.map((achievement) => (
-                <div key={achievement.id} 
-                     className={`p-3 rounded-xl text-center transition-all duration-200 hover:scale-105 ${
-                       achievement.unlocked 
-                         ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200' 
-                         : 'bg-gray-50 border border-gray-200 opacity-60'
-                     }`}>
+                <div key={achievement.id}
+                  className={`p-3 rounded-xl text-center transition-all duration-200 hover:scale-105 ${achievement.unlocked
+                    ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200'
+                    : 'bg-gray-50 border border-gray-200 opacity-60'
+                    }`}>
                   <div className="text-2xl mb-1">{achievement.icon}</div>
                   <p className="text-xs font-semibold text-gray-700">{achievement.title}</p>
                 </div>
