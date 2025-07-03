@@ -145,9 +145,9 @@ const Quizzes: React.FC = () => {
 
       {/* Enhanced Filters */}
       <div className="dashboard-card">
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row">
           {/* Search */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -155,15 +155,15 @@ const Quizzes: React.FC = () => {
                 placeholder="Test nomi bo'yicha qidiring..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 
+                className="w-full pl-12 pr-4 py-2 sm:py-3 border border-gray-200 rounded-xl focus:ring-2 
                          focus:ring-indigo-500 focus:border-transparent bg-gray-50 focus:bg-white
-                         transition-all duration-200"
+                         transition-all duration-200 text-sm sm:text-base"
               />
             </div>
           </div>
 
           {/* Filters */}
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <Dropdown
               value={filterStatus}
               options={[
@@ -172,7 +172,7 @@ const Quizzes: React.FC = () => {
                 { label: 'Yakunlangan', value: 'FINISHED' },
               ]}
               onChange={(e) => setFilterStatus(e.value)}
-              className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+              className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 w-full sm:w-auto text-sm sm:text-base"
               placeholder="Holatni tanlang"
             />
             <Dropdown
@@ -184,7 +184,7 @@ const Quizzes: React.FC = () => {
                 { label: 'Qiyin', value: 'hard' },
               ]}
               onChange={(e) => setFilterDifficulty(e.value)}
-              className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+              className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 w-full sm:w-auto text-sm sm:text-base"
               placeholder="Qiyinlikni tanlang"
             />
           </div>
@@ -192,7 +192,7 @@ const Quizzes: React.FC = () => {
       </div>
 
       {/* Enhanced Quiz Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
         {quizzesData?.data.map((quiz, index) => {
           const difficultyConfig = getDifficultyConfig(quiz.difficulty);
           const statusConfig = getStatusConfig(quiz.status);
@@ -200,7 +200,7 @@ const Quizzes: React.FC = () => {
           return (
             <div
               key={quiz.id}
-              className="card-interactive group relative overflow-hidden"
+              className="card-interactive group relative overflow-hidden rounded-xl sm:rounded-2xl"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Background Pattern */}
@@ -209,6 +209,9 @@ const Quizzes: React.FC = () => {
                             transition-opacity duration-300"></div>
 
               <div className="relative z-10 p-6">
+                {/* Mobile padding fix */}
+                <div className="block sm:hidden mb-2"></div>
+
                 {/* Header */}
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
