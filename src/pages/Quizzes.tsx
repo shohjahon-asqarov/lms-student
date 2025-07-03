@@ -186,11 +186,6 @@ const Quizzes: React.FC = () => {
               className="border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50"
               placeholder="Qiyinlikni tanlang"
             />
-            <button className="px-6 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 
-                             flex items-center gap-2 transition-all duration-200 hover:scale-105">
-              <Filter className="w-4 h-4" />
-              <span className="hidden sm:inline">Filtr</span>
-            </button>
           </div>
         </div>
       </div>

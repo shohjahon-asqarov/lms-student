@@ -41,15 +41,7 @@ const Settings: React.FC = () => {
     try {
       await updateSettingsMutation.mutateAsync({ language });
     } catch (error) {
-      console.error('Error updating language:', error);
-    }
-  };
-
-  const handleNotificationToggle = async (type: 'notifications' | 'emailUpdates', value: boolean) => {
-    try {
-      await updateSettingsMutation.mutateAsync({ [type]: value });
-    } catch (error) {
-      console.error('Error updating notification settings:', error);
+      console.error('Error updating language settings:', error);
     }
   };
 
@@ -86,12 +78,6 @@ const Settings: React.FC = () => {
       label: 'Til va mintaqa',
       icon: Globe,
       description: 'Til va joylashuv sozlamalari'
-    },
-    {
-      id: 'notifications',
-      label: 'Bildirishnomalar',
-      icon: Bell,
-      description: 'Xabar va bildirishnoma sozlamalari'
     },
     {
       id: 'privacy',
@@ -159,8 +145,8 @@ const Settings: React.FC = () => {
                       key={section.id}
                       onClick={() => setActiveSection(section.id)}
                       className={`w-full flex items-center gap-3 p-4 rounded-2xl transition-all duration-200 text-left ${activeSection === section.id
-                          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
-                          : 'text-gray-700 hover:bg-gray-50'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
+                        : 'text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       <Icon className="w-5 h-5" />
@@ -296,114 +282,7 @@ const Settings: React.FC = () => {
             )}
 
             {/* Notification Settings */}
-            {activeSection === 'notifications' && (
-              <div className="dashboard-card">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl 
-                                flex items-center justify-center shadow-lg">
-                    <Bell className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Bildirishnomalar</h2>
-                    <p className="text-gray-600">Bildirishnomalar va xabarlarni boshqaring</p>
-                  </div>
-                </div>
-
-                <div className="space-y-8">
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl 
-                                      flex items-center justify-center shadow-lg">
-                          <Bell className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-gray-900">Push bildirishnomalar</p>
-                          <p className="text-sm text-gray-600">Yangi testlar va natijalar haqida xabardor bo'ling</p>
-                        </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={settings?.notifications || false}
-                          onChange={(e) => handleNotificationToggle('notifications', e.target.checked)}
-                          className="sr-only peer"
-                        />
-                        <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
-                                      rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white 
-                                      after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
-                                      after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 
-                                      after:transition-all peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
-
-                    <div className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl 
-                                      flex items-center justify-center shadow-lg">
-                          <Mail className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-gray-900">Email xabarnomalar</p>
-                          <p className="text-sm text-gray-600">Muhim yangiliklar haqida email xabarnoma oling</p>
-                        </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={settings?.emailUpdates || false}
-                          onChange={(e) => handleNotificationToggle('emailUpdates', e.target.checked)}
-                          className="sr-only peer"
-                        />
-                        <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 
-                                      rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white 
-                                      after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
-                                      after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 
-                                      after:transition-all peer-checked:bg-green-600"></div>
-                      </label>
-                    </div>
-
-                    <div className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl 
-                                      flex items-center justify-center shadow-lg">
-                          <Volume2 className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-gray-900">Ovozli bildirishnomalar</p>
-                          <p className="text-sm text-gray-600">Bildirishnomalar uchun ovozli signal</p>
-                        </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          defaultChecked={true}
-                          className="sr-only peer"
-                        />
-                        <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 
-                                      rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white 
-                                      after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white 
-                                      after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 
-                                      after:transition-all peer-checked:bg-purple-600"></div>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="card p-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
-                    <div className="flex items-start gap-3">
-                      <Bell className="w-6 h-6 text-blue-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-blue-900 mb-2">Bildirishnomalar haqida</h4>
-                        <p className="text-sm text-blue-700">
-                          Bildirishnomalarni yoqish orqali yangi testlar, natijalar va muhim yangiliklar haqida
-                          o'z vaqtida xabardor bo'lasiz. Istalgan vaqtda o'chirib qo'yishingiz mumkin.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Removed notification settings section */}
 
             {/* Privacy Settings */}
             {activeSection === 'privacy' && (

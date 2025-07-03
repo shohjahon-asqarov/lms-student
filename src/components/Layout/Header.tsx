@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { Menu, Bell, Search, User, Sun, Moon, Settings } from 'lucide-react';
-import NotificationCenter from '../Notifications/NotificationCenter';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -9,11 +8,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user } = useAuth();
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Mock unread notifications count
-  const unreadCount = 2;
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -70,20 +65,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               )}
             </button>
 
-            {/* Notifications */}
-            <button
-              className="relative p-2.5 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-105"
-              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-            >
-              <Bell className="w-5 h-5 text-gray-600" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full 
-                               flex items-center justify-center font-semibold animate-pulse">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
             {/* Settings */}
             <button
               className="p-2.5 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-105"
@@ -128,12 +109,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           </div>
         </div>
       </header>
-
-      {/* Notification Center */}
-      <NotificationCenter
-        isOpen={isNotificationOpen}
-        onClose={() => setIsNotificationOpen(false)}
-      />
     </>
   );
 };

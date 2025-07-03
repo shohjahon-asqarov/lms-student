@@ -102,7 +102,6 @@ export interface ChangePasswordData {
 export interface UserSettings {
   theme: "light" | "dark";
   language: "en" | "uz" | "ru";
-  notifications: boolean;
   emailUpdates: boolean;
 }
 

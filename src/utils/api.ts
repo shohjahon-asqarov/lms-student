@@ -256,7 +256,6 @@ class ApiService {
     const mockSettings: UserSettings = {
       theme: "light",
       language: "en",
-      notifications: true,
       emailUpdates: true,
     };
 
