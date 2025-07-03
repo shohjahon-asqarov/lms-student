@@ -207,6 +207,7 @@ const MyQuizResult: React.FC = () => {
         const isOpen = openIndex === idx;
         const correctCount = result.studentCorrentcts?.length || 0;
         const totalQuestions = result.questions?.length || 0;
+        // Always calculate percent from data, fallback if backend is wrong
         const percent = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
         const motivation = getMotivation(percent);
 
@@ -257,7 +258,7 @@ const MyQuizResult: React.FC = () => {
                                             <span className="text-xs font-semibold text-blue-700">Foiz</span>
                                         </div>
                                         <span className="text-lg font-bold text-blue-900">
-                                            {typeof result.percentage === 'number' ? result.percentage : '—'}%
+                                            {percent}%
                                         </span>
                                     </div>
 
@@ -267,7 +268,7 @@ const MyQuizResult: React.FC = () => {
                                             <span className="text-xs font-semibold text-purple-700">Urinishlar</span>
                                         </div>
                                         <span className="text-lg font-bold text-purple-900">
-                                            {typeof result.attempts === 'number' ? result.attempts : '—'}
+                                            {typeof result.attempts === 'number' ? result.attempts : (idx + 1)}
                                         </span>
                                     </div>
 
