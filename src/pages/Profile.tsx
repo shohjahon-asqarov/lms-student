@@ -21,6 +21,9 @@ import {
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { ChangePasswordData } from '../types';
+import { Skeleton } from '../components/Skeleton';
+import { CardSkeleton } from '../components/Skeletons/CardSkeleton';
+import { ProfileHeaderSkeleton } from '../components/Skeletons/ProfileHeaderSkeleton';
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -71,19 +74,10 @@ const Profile: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-24 h-24 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl 
-                        flex items-center justify-center mx-auto mb-6 shadow-2xl animate-pulse">
-            <User className="w-12 h-12 text-white" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Profil yuklanmoqda...</h2>
-          <div className="flex items-center justify-center gap-2">
-            <div className="loading-dots">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
+        <div className="w-full max-w-2xl space-y-4">
+          {[...Array(4)].map((_, i) => (
+            <Skeleton key={i} height="h-24" />
+          ))}
         </div>
       </div>
     );
@@ -201,11 +195,10 @@ const Profile: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-3 py-4 px-2 border-b-2 font-semibold text-sm transition-all duration-200 ${
-                      activeTab === tab.id
-                        ? 'border-indigo-500 text-indigo-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
+                    className={`flex items-center gap-3 py-4 px-2 border-b-2 font-semibold text-sm transition-all duration-200 ${activeTab === tab.id
+                      ? 'border-indigo-500 text-indigo-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
                   >
                     <Icon className="w-5 h-5" />
                     <div className="text-left">
@@ -414,11 +407,10 @@ const Profile: React.FC = () => {
                   {achievements.map((achievement) => (
                     <div
                       key={achievement.id}
-                      className={`card p-6 text-center transition-all duration-300 hover:scale-105 ${
-                        achievement.unlocked
-                          ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200 shadow-lg'
-                          : 'bg-gray-50 border-gray-200 opacity-60'
-                      }`}
+                      className={`card p-6 text-center transition-all duration-300 hover:scale-105 ${achievement.unlocked
+                        ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200 shadow-lg'
+                        : 'bg-gray-50 border-gray-200 opacity-60'
+                        }`}
                     >
                       <div className={`text-4xl mb-4 ${achievement.unlocked ? 'animate-bounce' : 'grayscale'}`}>
                         {achievement.icon}
@@ -442,7 +434,7 @@ const Profile: React.FC = () => {
                         <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-500 
                                        rounded-full text-xs font-semibold">
                           <Lock className="w-3 h-3" />
-                          Qulflanган
+                          Qulflanghan
                         </span>
                       )}
                     </div>

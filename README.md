@@ -1,6 +1,6 @@
-# Quiz LMS Dashboard
+# iTech Academy Quiz Platform
 
-A modern Learning Management System (LMS) dashboard built with React, TypeScript, and Vite for managing and taking quizzes.
+A modern Learning Management System (LMS) dashboard built for iTech Academy with React, TypeScript, and Vite for managing and taking quizzes.
 
 ## 🚀 Tech Stack
 
@@ -449,6 +449,28 @@ For support and questions:
 - Create an issue in the repository
 - Contact the development team
 - Check the documentation
+
+## ⚠️ Mock Data in Dashboard
+
+Some data displayed on the Dashboard page (`src/pages/Dashboard.tsx`) is currently **hardcoded (mock data)** and does **not** come from the backend API. This is for demonstration and UI development purposes. These data structures should be replaced with real backend data in the future:
+
+- `studentStats`:
+  - `totalQuizzesTaken`
+  - `averageScore`
+  - `totalTimeSpent`
+  - `quizzesCompleted`
+  - `streak`
+  - `rank`
+  - `totalStudents`
+  - `achievements`
+- `performanceData`:
+  - Array of objects for monthly performance (e.g., `{ month: 'Yan', score: 75, tests: 2 }`)
+- `weeklyActivity`:
+  - Array of objects for weekly activity (e.g., `{ day: 'Du', tests: 2, time: 45 }`)
+- `achievements`:
+  - Array of achievement objects (e.g., `{ id: 1, title: 'First Quiz', icon: '🎯', unlocked: true }`)
+
+> **Note:** Only the user info and results fetched via hooks like `useAuth` and `useUserResults` are coming from the backend. All other stats, charts, and achievements are currently static.
 
 ---
 

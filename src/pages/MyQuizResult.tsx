@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import { useMyQuizResult } from '../hooks/useQueries';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { Skeleton } from '../components/Skeleton';
+import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 
 const MyQuizResult: React.FC = () => {
     const { quizId } = useParams<{ quizId: string }>();
@@ -31,19 +33,8 @@ const MyQuizResult: React.FC = () => {
     if (isLoading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-24 h-24 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl 
-                                  flex items-center justify-center mx-auto mb-6 shadow-2xl animate-pulse">
-                        <Brain className="w-12 h-12 text-white" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Natijalar yuklanmoqda...</h2>
-                    <div className="flex items-center justify-center gap-2">
-                        <div className="loading-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </div>
+                <div className="w-full max-w-3xl">
+                    <ListSkeleton count={6} />
                 </div>
             </div>
         );

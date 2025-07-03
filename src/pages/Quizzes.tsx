@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import { Dropdown } from 'primereact/dropdown';
 import { Paginator } from 'primereact/paginator';
+import { Skeleton } from '../components/Skeleton';
+import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 
 const Quizzes: React.FC = () => {
   const { user } = useAuth();
@@ -97,10 +99,9 @@ const Quizzes: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <div className="loading-spinner mb-4 w-12 h-12 border-4 border-indigo-200 border-t-indigo-600"></div>
-          <p className="text-gray-600 font-medium">Testlar yuklanmoqda...</p>
+      <div className="flex items-center justify-center h-64 w-full">
+        <div className="w-full max-w-3xl">
+          <ListSkeleton count={6} />
         </div>
       </div>
     );

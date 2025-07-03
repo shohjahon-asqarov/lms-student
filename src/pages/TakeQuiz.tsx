@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import { Question, QuizSubmission } from '../types';
 import { quizConfig } from '../config/env';
+import { Skeleton } from '../components/Skeleton';
+import { ListSkeleton } from '../components/Skeletons/ListSkeleton';
 
 const TakeQuiz: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -183,20 +185,8 @@ const TakeQuiz: React.FC = () => {
     if (startQuizMutation.isPending) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-24 h-24 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl 
-                                  flex items-center justify-center mx-auto mb-6 shadow-2xl animate-pulse">
-                        <Brain className="w-12 h-12 text-white" />
-                    </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Test boshlanmoqda... 🚀</h2>
-                    <p className="text-gray-600 mb-6">Iltimos, test yuklanishini kuting.</p>
-                    <div className="flex items-center justify-center gap-2">
-                        <div className="loading-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </div>
+                <div className="w-full max-w-3xl">
+                    <ListSkeleton count={6} />
                 </div>
             </div>
         );
@@ -387,8 +377,8 @@ const TakeQuiz: React.FC = () => {
                                                     </span>
                                                 </div>
                                                 <div className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${isSelected
-                                                        ? 'border-indigo-500 bg-indigo-500'
-                                                        : 'border-gray-300 group-hover:border-indigo-400'
+                                                    ? 'border-indigo-500 bg-indigo-500'
+                                                    : 'border-gray-300 group-hover:border-indigo-400'
                                                     }`}>
                                                     {isSelected && (
                                                         <CheckCircle className="w-6 h-6 text-white -m-0.5" />

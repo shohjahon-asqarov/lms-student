@@ -24,6 +24,10 @@ const Layout: React.FC = () => {
               <Outlet />
             </div>
           </main>
+
+          <footer className="w-full text-center py-4 text-gray-400 text-sm border-t border-gray-100 mt-8">
+            © {new Date().getFullYear()} iTech Academy. Barcha huquqlar himoyalangan.
+          </footer>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useUserResults } from '../hooks/useQueries';
@@ -27,10 +27,16 @@ import {
   ArrowRight,
   BarChart3
 } from 'lucide-react';
+import { Button } from "../components/Button";
+import { Card } from "../components/Card";
+import { Modal } from "../components/Modal";
+import { Skeleton } from "../components/Skeleton";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const { data: resultsData } = useUserResults(user?.id || '', 1, 5);
+  const { data: resultsData, isLoading } = useUserResults(user?.id || '', 1, 5);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Enhanced mock data for student dashboard
   const studentStats = {
@@ -71,6 +77,16 @@ const Dashboard: React.FC = () => {
     { id: 3, title: 'Perfect Score', icon: '💯', unlocked: false },
     { id: 4, title: 'Streak Master', icon: '🔥', unlocked: true },
   ];
+
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-2xl mx-auto py-12 space-y-4">
+        {[...Array(4)].map((_, i) => (
+          <Skeleton key={i} height="h-24" />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 fade-in">

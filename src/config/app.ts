@@ -8,4 +8,6 @@ export const appConfig = {
   author: import.meta.env.VITE_APP_AUTHOR || "ITech Academy",
 } as const;
 
+export const APP_NAME = "iTech Academy";
+
 export default appConfig;

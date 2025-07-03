@@ -40,6 +40,18 @@ function App() {
       <AuthProvider>
         <Router>
           <div className="App">
+            {/* Test mode notification bar */}
+            <div className="fixed top-0 left-0 w-full z-50 bg-yellow-100 border-b border-yellow-300 text-yellow-900 flex items-center justify-center py-2 px-4 text-sm font-medium shadow-sm">
+              <span>Sayt test rejimida ishlamoqda. Kamchilik yoki takliflaringiz bo‘lsa, bizga xabar bering.</span>
+              <a
+                href="https://t.me/shohjahon_asqarov"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-4 px-3 py-1 rounded bg-yellow-300 text-yellow-900 font-semibold hover:bg-yellow-400 transition-all"
+              >
+                Fikr bildirish / Aloqa
+              </a>
+            </div>
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />

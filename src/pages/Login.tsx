@@ -3,6 +3,8 @@ import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { BookOpen, Eye, EyeOff, Loader2, Sparkles, Shield, Zap } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { Skeleton } from '../components/Skeleton';
+import { FormSkeleton } from '../components/Skeletons/FormSkeleton';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -28,12 +30,12 @@ const Login: React.FC = () => {
     let digits = value.replace(/[^0-9]/g, '');
     if (digits.startsWith('998')) digits = digits.slice(3);
     digits = digits.slice(0, 9);
-    
+
     if (e.nativeEvent instanceof InputEvent && e.nativeEvent.inputType === 'deleteContentBackward') {
       setPhone(value);
       return;
     }
-    
+
     let formatted = '+998 ';
     if (digits.length > 0) {
       formatted += '(' + digits.slice(0, 2);
@@ -119,7 +121,7 @@ const Login: React.FC = () => {
           {/* Features */}
           <div className="space-y-4">
             {features.map((feature, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex items-center gap-4 p-4 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/80 transition-all duration-300"
                 style={{ animationDelay: `${index * 200}ms` }}
@@ -231,10 +233,7 @@ const Login: React.FC = () => {
                          active:translate-y-0"
               >
                 {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Kirilmoqda...
-                  </>
+                  <FormSkeleton />
                 ) : (
                   <>
                     <Sparkles className="w-5 h-5" />

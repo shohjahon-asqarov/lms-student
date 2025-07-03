@@ -80,16 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       `}>
         {/* Header */}
         <div className="p-6 border-b border-gray-200/50 bg-gradient-to-r from-indigo-600 to-purple-600">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center
-                          shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <BookOpen className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-white">Talaba Portali</h1>
-              <p className="text-sm text-indigo-100">Test o'rganish platformasi</p>
-            </div>
-          </div>
+          <span className="font-bold text-white text-xl tracking-wide">iTech Academy</span>
         </div>
 
         {/* User Info */}
@@ -141,18 +132,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 {isActive && (
                   <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-90"></div>
                 )}
-                
+
                 {/* Icon container */}
                 <div className={`
                   relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300
-                  ${isActive 
-                    ? 'bg-white/20 backdrop-blur-sm' 
+                  ${isActive
+                    ? 'bg-white/20 backdrop-blur-sm'
                     : `bg-gradient-to-r ${item.gradient} text-white shadow-md group-hover:shadow-lg group-hover:scale-110`
                   }
                 `}>
                   <Icon className="w-5 h-5 relative z-10" />
                 </div>
-                
+
                 {/* Text content */}
                 <div className="relative z-10 flex-1">
                   <span className="font-semibold text-sm">{item.label}</span>

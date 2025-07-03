@@ -23,6 +23,7 @@ import {
 import { QuizFinishResponse } from '../types';
 import { sendTelegramResult } from '../utils/telegram';
 import { toast } from 'react-toastify';
+import { Skeleton } from '../components/Skeleton';
 
 function getScoreColor(percentage: number) {
   if (percentage >= 90) return 'text-emerald-600';
