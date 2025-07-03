@@ -517,7 +517,7 @@ const TakeQuiz: React.FC = () => {
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="text-yellow-600">•</span>
-                                    Vaqtingizni to'g'ri taqsimlang
+                                    Vaqtingizni to'g\'ri taqsimlang
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="text-yellow-600">•</span>
